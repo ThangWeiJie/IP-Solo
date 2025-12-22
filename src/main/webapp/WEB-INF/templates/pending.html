@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literacy Hub | Pending</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}" media="screen,projection">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+<main>
+    <div class="card login-card z-depth-3 center-align">
+        <div class="brand-logo-container">
+            <i class="material-icons large amber-text">pending_actions</i>
+            <h4 class="indigo-text text-darken-2">Request Received</h4>
+            <p class="grey-text">
+                Thank you!
+                To maintain the quality of our hub, Professional accounts must be verified by an Admin.
+            </p>
+            <p class="indigo-text"><b>We will email you once your account is activated.</b></p>
+        </div>
+        <a th:href="@{/login}" class="btn indigo darken-2 btn-login">Return to Login</a>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.updateTextFields();
+    });
+</script>
+</body>
+</html>

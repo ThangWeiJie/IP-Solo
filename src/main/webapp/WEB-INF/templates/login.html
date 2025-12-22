@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literacy Hub | Login</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}" media="screen,projection">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+
+<main>
+    <div class="card login-card z-depth-3">
+        <div class="center-align brand-logo-container">
+            <i class="material-icons large indigo-text text-darken-2">psychology_alt</i>
+            <h4 class="indigo-text text-darken-2" style="margin-top: 0;">Mental Health Literacy Hub</h4>
+            <p class="grey-text">Decoding mental health for a more compassionate world</p>
+        </div>
+
+        <div th:if="${param.success}" class="card-panel teal lighten-4 teal-text text-darken-4 z-depth-0"
+             style="padding: 10px; border-radius: 8px; border: 1px solid #80cbc4; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+                <i class="material-icons" style="margin-right: 10px;">check_circle</i>
+                <span>Registration successful! Please sign in below.</span>
+            </div>
+        </div>
+
+        <div th:if="${param.error}"
+             class="card-panel amber lighten-4 amber-text text-darken-4 z-depth-0"
+             style="padding: 10px; border-radius: 8px; border: 1px solid #ffd54f; margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+                <i class="material-icons" style="margin-right: 10px;">hourglass_empty</i>
+                <span>Your account is still pending admin approval. Please check back later!</span>
+            </div>
+        </div>
+
+        <div th:if="${error}" class="card-panel red lighten-4 red-text text-darken-4 z-depth-0"
+             style="padding: 10px; border-radius: 8px; border: 1px solid #ef9a9a;">
+            <div style="display: flex; align-items: center;">
+                <i class="material-icons" style="margin-right: 10px;">error_outline</i>
+                <span th:text="${error}">Invalid credentials</span>
+            </div>
+        </div>
+
+        <!--/*@thymesVar id="loginRequest" type="com.literacyhub.dto.LoginDTO"*/-->
+        <form th:action="@{/login}" th:object="${loginRequest}" method="post">
+            <div class="input-field">
+                <i class="material-icons prefix">email</i>
+                <input id="email" type="email" th:field="*{email}" class="validate">
+                <label for="email">Email Address</label>
+            </div>
+
+            <div class="input-field">
+                <i class="material-icons prefix">vpn_key</i>
+                <input id="password" type="password" th:field="*{password}" class="validate">
+                <label for="password">Password</label>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <label style="float: right;">
+                        <a href="#!" class="indigo-text">Forgot password?</a>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-large waves-effect waves-light indigo darken-2 btn-login" type="submit">
+                Login
+                <i class="material-icons right">send</i>
+            </button>
+        </form>
+
+        <div class="center-align" style="margin-top: 30px;">
+            <span class="grey-text text-darken-1">New to the hub?</span>
+            <a th:href="@{/register}" class="indigo-text text-darken-2"><b> Create an Account</b></a>
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    // Initialize Materialize components if needed
+    document.addEventListener('DOMContentLoaded', function() {
+        M.updateTextFields();
+    });
+</script>
+
+</body>
+</html>

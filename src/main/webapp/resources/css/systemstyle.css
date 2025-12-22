@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background: #eceff1; /* Light Blue-Grey Background */
+}
+main {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    border-radius: 12px;
+}
+.brand-logo-container {
+    margin-bottom: 20px;
+}
+.btn-login {
+    width: 100%;
+    margin-top: 20px;
+    text-transform: none;
+    font-weight: 500;
+}
