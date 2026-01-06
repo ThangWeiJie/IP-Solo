@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Homepage - Student</title>
@@ -8,8 +8,12 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-    <div th:insert="~{studentnavbar.html :: header-nav}"></div>
-    <h1>Temp page</h1>
+    <div th:replace="~{headerfragment :: navbar('home')}"></div>
 </body>
 <script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.updateTextFields();
+    });
+</script>
 </html>

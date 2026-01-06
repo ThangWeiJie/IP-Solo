@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header_head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">MH Hub</title>
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Your System Wide CSS -->
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+
+<body>
+<!-- Reusable Navbar Fragment -->
+<nav th:fragment="navbar(activePage)" class="teal darken-2 z-depth-0" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="nav-wrapper container">
+        <!-- Brand Logo -->
+        <a href="/" class="brand-logo left">
+            <i class="material-icons left hide-on-small-only">psychology</i>
+            <span style="font-weight: 300;">MH Hub</span>
+        </a>
+
+        <!-- Direct Navigation Links (No Sidebar) -->
+        <ul class="right">
+            <li th:class="${activePage == 'home' ? 'active' : ''}">
+                <a href="/">Home</a>
+            </li>
+            <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
+                <a href="/dashboard">Dashboard</a>
+            </li>
+            <li th:class="${activePage == 'resources' ? 'active' : ''}">
+                <a href="/resources">Resources</a>
+            </li>
+            <li class="hide-on-small-only">
+                <a href="/logout" class="waves-effect waves-light btn teal lighten-1"
+                   style="text-transform: none; border-radius: 4px; margin-left: 10px; height: 36px; line-height: 36px;">
+                    Sign Out
+                </a>
+            </li>
+            <!-- Small screen logout icon to save space -->
+            <li class="hide-on-med-and-up">
+                <a href="/logout"><i class="material-icons">exit_to_app</i></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>
+</html>
