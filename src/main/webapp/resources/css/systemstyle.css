@@ -1,27 +1,91 @@
+/* Your system-wide styling integrated */
 body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
     background: #eceff1; /* Light Blue-Grey Background */
+    font-family: 'Roboto', sans-serif;
 }
+
 main {
     flex: 1 0 auto;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding: 20px;
 }
-.login-card {
+
+/* Updated active state for navbar tabs */
+nav ul li.active {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid #ffffff;
+}
+
+.login-card, .dashboard-card {
     width: 100%;
-    max-width: 450px;
+    max-width: 900px;
     padding: 30px;
     border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+.compact-card {
+    max-width: 450px;
+}
+
 .brand-logo-container {
     margin-bottom: 20px;
+    text-align: center;
 }
-.btn-login {
+
+.btn-login, .btn-submit {
     width: 100%;
     margin-top: 20px;
     text-transform: none;
     font-weight: 500;
+    height: 45px;
+    border-radius: 8px;
+}
+
+.test-section {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.q-card {
+    border-left: 5px solid #009688;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 8px;
+}
+
+/* --- Added Navbar Specific Styling --- */
+
+/* Ensuring links are visible and spaced nicely on small screens */
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.brand-logo {
+    position: relative !important; /* Materialize defaults this to absolute */
+}
+
+nav ul {
+    display: flex !important;
+}
+
+nav ul li a {
+    padding: 0 10px !important;
+    font-size: 0.9rem;
+}
+
+@media only screen and (min-width: 601px) {
+    nav ul li a {
+        padding: 0 20px !important;
+        font-size: 1rem;
+    }
 }
