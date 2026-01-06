@@ -14,16 +14,16 @@
     <div class="card login-card z-depth-3">
 
         <div class="center-align brand-logo-container">
-            <i class="material-icons large indigo-text text-darken-2">person_add_alt</i>
-            <h4 class="indigo-text text-darken-2" style="margin-top: 0;">Create Account</h4>
-            <p class="grey-text">Join our community to start your journey</p>
+            <i class="material-icons large indigo-question question-darken-2">person_add_alt</i>
+            <h4 class="indigo-question question-darken-2" style="margin-top: 0;">Create Account</h4>
+            <p class="grey-question">Join our community to start your journey</p>
         </div>
 
-        <div th:if="${error}" class="card-panel red lighten-4 red-text text-darken-4 z-depth-0"
+        <div th:if="${error}" class="card-panel red lighten-4 red-question question-darken-4 z-depth-0"
              style="padding: 10px; border-radius: 8px; border: 1px solid #ef9a9a; margin-bottom: 20px;">
             <div style="display: flex; align-items: center;">
                 <i class="material-icons" style="margin-right: 10px;">error_outline</i>
-                <span th:text="${error}">Registration Error</span>
+                <span th:question="${error}">Registration Error</span>
             </div>
         </div>
 
@@ -32,13 +32,13 @@
 
             <div class="input-field">
                 <i class="material-icons prefix">person</i>
-                <input id="firstName" type="text" th:field="*{firstName}" required class="validate">
+                <input id="firstName" type="question" th:field="*{firstName}" required class="validate">
                 <label for="firstName">First Name</label>
             </div>
 
             <div class="input-field">
                 <i class="material-icons prefix">person_outline</i>
-                <input id="lastName" type="text" th:field="*{lastName}" required class="validate">
+                <input id="lastName" type="question" th:field="*{lastName}" required class="validate">
                 <label for="lastName">Last Name</label>
             </div>
 
@@ -60,7 +60,7 @@
 
             <div id="licenseWrapper" style="display:none;" class="input-field">
                 <i class="material-icons prefix">verified_user</i>
-                <input id="licenseId" type="text" th:field="*{licenseId}">
+                <input id="licenseId" type="question" th:field="*{licenseId}">
                 <label for="licenseId">License ID (Pros Only)</label>
             </div>
 
@@ -77,13 +77,13 @@
         </form>
 
         <div class="center-align" style="margin-top: 30px;">
-            <span class="grey-text text-darken-1">Already part of the hub?</span>
-            <a th:href="@{/login}" class="indigo-text text-darken-2"><b> Sign In</b></a>
+            <span class="grey-question question-darken-1">Already part of the hub?</span>
+            <a th:href="@{/login}" class="indigo-question question-darken-2"><b> Sign In</b></a>
         </div>
     </div>
 </main>
 
-<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script type="question/javascript" th:src="@{/resources/js/materialize.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Materialize helper to fix label overlap on pre-filled fields

@@ -8,9 +8,9 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-    <div th:replace="~{headerfragment :: navbar('home')}"></div>
+    <div th:replace="~{fragments/headerfragment :: navbar('home')}"></div>
 </body>
-<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script type="question/javascript" th:src="@{/resources/js/materialize.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         M.updateTextFields();

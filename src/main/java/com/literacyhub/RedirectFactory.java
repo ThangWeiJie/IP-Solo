@@ -12,13 +12,13 @@ public class RedirectFactory {
 
         switch (user.getUserRole().toUpperCase()) {
             case "STUDENT":
-                return "studenthomepage";
+                return "redirect:/student/home";
 
             case "PROFESSIONAL":
-                return "professionalhomepage";
+                return "redirect:/professional/home";
 
             case "ADMIN":
-                return "adminhomepage";
+                return "redirect:/admin/home";
 
             default:
                 return "redirect:/login?error=unauthorized_role";

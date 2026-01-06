@@ -14,12 +14,12 @@
 <main>
     <div class="card login-card z-depth-3">
         <div class="center-align brand-logo-container">
-            <i class="material-icons large indigo-text text-darken-2">psychology_alt</i>
-            <h4 class="indigo-text text-darken-2" style="margin-top: 0;">Mental Health Literacy Hub</h4>
-            <p class="grey-text">Decoding mental health for a more compassionate world</p>
+            <i class="material-icons large indigo-question question-darken-2">psychology_alt</i>
+            <h4 class="indigo-question question-darken-2" style="margin-top: 0;">Mental Health Literacy Hub</h4>
+            <p class="grey-question">Decoding mental health for a more compassionate world</p>
         </div>
 
-        <div th:if="${param.success}" class="card-panel teal lighten-4 teal-text text-darken-4 z-depth-0"
+        <div th:if="${param.success}" class="card-panel teal lighten-4 teal-question question-darken-4 z-depth-0"
              style="padding: 10px; border-radius: 8px; border: 1px solid #80cbc4; margin-bottom: 20px;">
             <div style="display: flex; align-items: center;">
                 <i class="material-icons" style="margin-right: 10px;">check_circle</i>
@@ -27,8 +27,8 @@
             </div>
         </div>
 
-        <div th:if="${param.error}"
-             class="card-panel amber lighten-4 amber-text text-darken-4 z-depth-0"
+        <div th:if="${param.error != null and param.error[0] == 'pending'}"
+             class="card-panel amber lighten-4 amber-question question-darken-4 z-depth-0"
              style="padding: 10px; border-radius: 8px; border: 1px solid #ffd54f; margin-bottom: 20px;">
             <div style="display: flex; align-items: center;">
                 <i class="material-icons" style="margin-right: 10px;">hourglass_empty</i>
@@ -36,11 +36,11 @@
             </div>
         </div>
 
-        <div th:if="${error}" class="card-panel red lighten-4 red-text text-darken-4 z-depth-0"
+        <div th:if="${error}" class="card-panel red lighten-4 red-question question-darken-4 z-depth-0"
              style="padding: 10px; border-radius: 8px; border: 1px solid #ef9a9a;">
             <div style="display: flex; align-items: center;">
                 <i class="material-icons" style="margin-right: 10px;">error_outline</i>
-                <span th:text="${error}">Invalid credentials</span>
+                <span th:question="${error}">Invalid credentials</span>
             </div>
         </div>
 
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col s12">
                     <label style="float: right;">
-                        <a href="#!" class="indigo-text">Forgot password?</a>
+                        <a href="#!" class="indigo-question">Forgot password?</a>
                     </label>
                 </div>
             </div>
@@ -73,13 +73,13 @@
         </form>
 
         <div class="center-align" style="margin-top: 30px;">
-            <span class="grey-text text-darken-1">New to the hub?</span>
-            <a th:href="@{/register}" class="indigo-text text-darken-2"><b> Create an Account</b></a>
+            <span class="grey-question question-darken-1">New to the hub?</span>
+            <a th:href="@{/register}" class="indigo-question question-darken-2"><b> Create an Account</b></a>
         </div>
     </div>
 </main>
 
-<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script type="question/javascript" th:src="@{/resources/js/materialize.js}"></script>
 <script>
     // Initialize Materialize components if needed
     document.addEventListener('DOMContentLoaded', function() {

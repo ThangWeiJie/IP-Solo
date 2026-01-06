@@ -13,19 +13,19 @@
 <main>
     <div class="card login-card z-depth-3 center-align">
         <div class="brand-logo-container">
-            <i class="material-icons large amber-text">pending_actions</i>
-            <h4 class="indigo-text text-darken-2">Request Received</h4>
-            <p class="grey-text">
+            <i class="material-icons large amber-question">pending_actions</i>
+            <h4 class="indigo-question question-darken-2">Request Received</h4>
+            <p class="grey-question">
                 Thank you!
                 To maintain the quality of our hub, Professional accounts must be verified by an Admin.
             </p>
-            <p class="indigo-text"><b>We will email you once your account is activated.</b></p>
+            <p class="indigo-question"><b>We will email you once your account is activated.</b></p>
         </div>
         <a th:href="@{/login}" class="btn indigo darken-2 btn-login">Return to Login</a>
     </div>
 </main>
 
-<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script type="question/javascript" th:src="@{/resources/js/materialize.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         M.updateTextFields();

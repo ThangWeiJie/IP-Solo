@@ -26,7 +26,13 @@ public class AuthController {
     private UserFactory userFactory;
 
     @GetMapping("/login")
-    public String showLoginPage(Model model) {
+    public String showLoginPage(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+
+        if (user != null) {
+            return redirectFactory.getDashboardRedirect(user);
+        }
+
         model.addAttribute("loginRequest", new LoginDTO());
         return "login";
     }
@@ -79,5 +85,14 @@ public class AuthController {
             model.addAttribute("error", "Registration failed. Email might already be in use.");
             return "register";
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/login";
     }
 }
