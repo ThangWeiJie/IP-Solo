@@ -18,6 +18,15 @@ public class AssessmentConfig {
     @Column(name = "multiplier")
     private Integer multiplier = 1;
 
+    @Column(name = "instructions", columnDefinition = "TEXT")
+    private String instructions;
+
+    @Column(name = "scoring_type")
+    private String scoringType;
+
+    @Column(name = "scoring_json")
+    private String scoringJSON;
+
     public AssessmentConfig() {
     }
 
@@ -48,6 +57,30 @@ public class AssessmentConfig {
 
     public void setMultiplier(Integer m) {
         this.multiplier = m;
+    }
+
+    public String getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(String instructions) {
+        this.instructions = instructions;
+    }
+
+    public String getScoringType() {
+        return scoringType;
+    }
+
+    public void setScoringType(String scoringType) {
+        this.scoringType = scoringType;
+    }
+
+    public String getScoringJSON() {
+        return scoringJSON;
+    }
+
+    public void setScoringJSON(String scoringJSON) {
+        this.scoringJSON = scoringJSON;
     }
 }
 

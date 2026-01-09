@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Assessments</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}" media="screen,projection">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+<div th:replace="~{fragments/headerfragment :: navbar('assessment')}"></div>
+
+<main>
+    <div class="dashboard-card">
+        <div class="brand-logo-container">
+            <i class="material-icons large indigo-text text-darken-2">assignment</i>
+            <h4 class="indigo-text text-darken-2" style="margin-top: 0;">Self Assessment Center</h4>
+        </div>
+        <div class="row">
+            <div th:each="config: ${assessment}" class="col s12 m6">
+                <!--/*@thymesVar id="config" type="com.literacyhub.entity.AssessmentConfig"*/-->
+                <div class="card hoverable" style="border-radius: 12px; border: 1px solid #e0e0e0; box-shadow: none;">
+                    <div class="card-content">
+                        <div class="right">
+                            <span class="badge indigo white-text" style="border-radius: 4px; margin: 0;"
+                                  th:text="${config.testType}">TYPE</span>
+                        </div>
+                        <span class="card-title indigo-text text-darken-2" style="font-weight: bold;"
+                              th:text="${config.testName}">Assessment Name</span>
+
+                        <p class="grey-text text-darken-1" style="min-height: 3em;"
+                           th:text="${config.instructions ?: 'Take this assessment to track your progress and understand your mental health literacy levels.'}">
+                            Default description of the assessment utility.
+                        </p>
+                    </div>
+                    <div class="card-action" style="border-top: 1px solid #f1f1f1; border-radius: 0 0 12px 12px;">
+                        <a th:href="@{'/student/assessment/take/' + ${config.testType}}"
+                           class="btn-flat indigo-text text-darken-2 font-weight-bold"
+                           style="padding: 0; text-transform: none; font-weight: 600;">
+                            Start Assessment <i class="material-icons right">arrow_forward</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${#lists.isEmpty(assessment)}" class="col s12 center-align" style="padding: 50px 0;">
+                <i class="material-icons grey-text text-lighten-1" style="font-size: 5rem;">find_in_page</i>
+                <h5 class="grey-text">No assessments found</h5>
+                <p class="grey-text">Please check back later or contact your instructor.</p>
+            </div>
+        </div>
+
+        <div class="center-align" style="margin-top: 30px;">
+            <a th:href="@{/student/home}" class="grey-text text-darken-1">
+                <i class="material-icons left">chevron_left</i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</main>
+<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.updateTextFields();
+    });
+</script>
+</body>
+</html>

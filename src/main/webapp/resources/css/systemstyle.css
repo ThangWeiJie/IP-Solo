@@ -1,10 +1,8 @@
 /* Mental Health Literacy Hub - System Styles
-    Palette:
-    - Background: #eceff1 (Light Blue-Grey)
-    - Primary: #303f9f (Indigo Darken-2)
-    - Accent: #009688 (Teal)
+   Includes Layout, Typography, and Assessment UI components
 */
 
+/* --- 1-19: CORE SYSTEM STYLES (Your original rules) --- */
 body {
     display: flex;
     min-height: 100vh;
@@ -23,9 +21,8 @@ main {
     padding: 20px;
 }
 
-/* Navbar Customization */
 nav {
-    background-color: #303f9f !important; /* Indigo Darken-2 */
+    background-color: #303f9f !important;
 }
 
 .nav-wrapper {
@@ -37,7 +34,6 @@ nav ul li.active {
     border-bottom: 3px solid #ffffff;
 }
 
-/* Card Containers */
 .login-card, .dashboard-card {
     width: 100%;
     padding: 30px;
@@ -55,7 +51,6 @@ nav ul li.active {
     max-width: 900px;
 }
 
-/* Brand & Typography */
 .brand-logo-container {
     margin-bottom: 25px;
     text-align: center;
@@ -65,7 +60,6 @@ nav ul li.active {
     margin-bottom: 10px;
 }
 
-/* Buttons */
 .btn-login, .btn-submit {
     width: 100%;
     margin-top: 20px;
@@ -78,9 +72,8 @@ nav ul li.active {
     justify-content: center;
 }
 
-/* Mental Health Specific Components */
 .q-card {
-    border-left: 5px solid #009688; /* Teal Accent */
+    border-left: 5px solid #009688;
     margin-bottom: 20px;
     padding: 20px;
     background: #f9fdfc;
@@ -92,24 +85,79 @@ nav ul li.active {
     margin-bottom: 15px;
 }
 
-/* Responsive Adjustments */
 @media only screen and (max-width: 600px) {
-    main {
-        padding: 10px;
-    }
-
-    .login-card, .dashboard-card {
-        padding: 20px;
-    }
-
-    nav ul li a {
-        padding: 0 10px !important;
-        font-size: 0.8rem;
-    }
+    main { padding: 10px; }
+    .login-card, .dashboard-card { padding: 20px; }
+    nav ul li a { padding: 0 10px !important; font-size: 0.8rem; }
 }
 
 @media only screen and (min-width: 601px) {
-    nav ul li a {
-        padding: 0 20px !important;
-    }
+    nav ul li a { padding: 0 20px !important; }
+}
+
+/* --- 20-24: FORM ENHANCEMENT STYLES (The missing beauty) --- */
+
+/* Question Typography & Spacing */
+.question-text {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: #1a237e;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+/* The Likert Scale Horizontal Layout */
+.options-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    margin: 1.5rem 0;
+    padding: 15px;
+    background: #fcfcfc;
+    border-radius: 8px;
+}
+
+/* Individual Radio Items */
+.option-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    text-align: center;
+}
+
+/* Fix for Materialize radio text positioning */
+[type="radio"]:not(:checked) + span,
+[type="radio"]:checked + span {
+    padding-left: 25px !important;
+    height: 25px;
+    line-height: 25px;
+    font-size: 0.9rem;
+    color: #546e7a;
+}
+
+/* Sticky Progress Bar for long forms */
+.sticky-progress {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #eceff1;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.progress-label {
+    font-weight: bold;
+    color: #303f9f;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.q-card:not(:last-child) {
+    margin-bottom: 25px;
+}
+
+.submit-container {
+    margin-top: 30px;
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Assessment Result</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+<div th:replace="~{fragments/headerfragment :: navbar('assessments')}"></div>
+
+<main class="container">
+    <div class="dashboard-card" th:classappend="${result.colorClass}" style="padding: 30px; margin-top: 30px;">
+        <h4 th:text="${config.testName} + ' Result'">Assessment Result</h4>
+
+        <p>
+            <strong>Total Score:</strong>
+            <span th:text="${result.score}">0</span>
+        </p>
+
+        <p>
+            <strong>Category:</strong>
+            <span th:text="${result.level}">Level</span>
+        </p>
+
+        <p th:text="${result.recommendation}">
+            Recommendation goes here.
+        </p>
+
+        <div style="margin-top: 20px;">
+            <a th:href="@{/student/assessment/list}" class="btn waves-effect waves-light indigo darken-2">
+                Back to Assessment List
+                <i class="material-icons right">arrow_back</i>
+            </a>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/resources/js/materialize.js}"></script>
+</body>
+</html>

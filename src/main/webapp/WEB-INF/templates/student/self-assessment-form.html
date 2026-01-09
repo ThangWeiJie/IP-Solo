@@ -1,0 +1,87 @@
+<!--/*@thymesVar id="config" type="com.literacyhub.entity.AssessmentConfig"*/-->
+<!--/*@thymesVar id="questions" type="java.util.List<com.literacyhub.entity.AssessmentQuestion>"*/-->
+<!--/*@thymesVar id="options" type="java.util.List<com.literacyhub.entity.AssessmentOption>"*/-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${config.testName}">Assessment</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body th:attr="data-total-questions=${questions.size()}">
+<div th:replace="~{fragments/headerfragment :: navbar('assessments')}"></div>
+
+<main class="container assessment-container">
+    <!-- Breadcrumb / Back Navigation -->
+    <div style="width: 100%; max-width: 900px; margin-top: 10px;">
+        <a th:href="@{/student/assessments}" class="indigo-text">
+            <i class="material-icons left">keyboard_arrow_left</i> Back to Assessment Center
+        </a>
+    </div>
+
+    <div class="sticky-progress">
+        <span class="progress-label">
+            Progress: <span id="progress-count">0</span>/<span th:text="${questions.size()}">0</span>
+        </span>
+        <div class="progress">
+            <div id="progress-bar" class="determinate" style="width: 0"></div>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <h4 class="indigo-text text-darken-4" th:text="${config.testName}">Test Name</h4>
+        <p class="grey-text text-darken-2" style="font-size: 1.1rem;" th:text="${config.instructions}">Instructions</p>
+
+        <div class="card-panel transparent z-depth-0 scale-legend">
+            <div th:each="opt : ${options}" class="legend-item">
+                    <span class="indigo-text text-darken-4">
+                        <span class="legend-badge" th:text="${opt.optionValue}">0</span>
+                        <span class="grey-text text-darken-3" th:text="${opt.optionLabel}">Label</span>
+                    </span>
+            </div>
+        </div>
+
+        <form th:action="@{/student/assessment/submit}" method="post">
+            <input type="hidden" name="testType" th:value="${config.testType}">
+
+            <!-- Loop through questions -->
+            <!-- We ensure we are iterating over the 'questions' list provided by the controller -->
+            <div th:each="q, iter : ${questions}" class="q-card">
+                    <span class="question-text">
+                        <span class="indigo-text text-lighten-2" th:text="${iter.count} + '. '">1. </span>
+                        <span th:text="${q.question}">Question text should appear here.</span>
+                    </span>
+
+                <div class="options-container">
+                    <div th:each="opt : ${options}" class="option-item">
+                        <label>
+                            <input class="with-gap"
+                                   th:name="'q_' + ${q.id}"
+                                   type="radio"
+                                   th:value="${opt.optionValue}"
+                                   required />
+                            <span th:text="${opt.optionLabel}">Option Label</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="submit-container">
+                <button class="btn-large waves-effect waves-light indigo darken-2 btn-submit" type="submit">
+                    Submit Assessment
+                    <i class="material-icons right">send</i>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<script th:src="@{/resources/js/materialize.js}"></script>
+<script th:src="@{/resources/js/assessment-progress.js}"></script>
+</body>
+</html>

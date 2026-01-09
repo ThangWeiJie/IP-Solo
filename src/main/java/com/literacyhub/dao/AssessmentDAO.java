@@ -14,11 +14,24 @@ public class AssessmentDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    public List<AssessmentConfig> findAllConfigs() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("FROM AssessmentConfig", AssessmentConfig.class)
+                .getResultList();
+    }
+
     public AssessmentConfig findConfigByType(String type) {
         return sessionFactory.getCurrentSession()
                 .createQuery("FROM AssessmentConfig WHERE testType = :t", AssessmentConfig.class)
                 .setParameter("t", type)
                 .uniqueResult();
+    }
+
+    public List<AssessmentOption> findOptionsByType(String type) {
+        String hql = "FROM AssessmentOption WHERE testType = :type ORDER BY displayOrder ASC";
+        return sessionFactory.getCurrentSession().createQuery(hql, AssessmentOption.class)
+                .setParameter("type", type)
+                .getResultList();
     }
 
     public void saveConfig(AssessmentConfig config) {
