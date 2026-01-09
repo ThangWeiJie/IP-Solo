@@ -9,6 +9,12 @@ public class Admin extends User {
     @Column(name = "staff_id", nullable = false, unique = true)
     private String staffId;
 
+    @Column(name = "department")
+    private String department;
+
+    @Column(name = "permissions")
+    private String permissions;
+
     public Admin() {
         super();
     }
@@ -19,5 +25,21 @@ public class Admin extends User {
 
     public void setStaffId(String staffId) {
         this.staffId = staffId;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(String permissions) {
+        this.permissions = permissions;
     }
 }

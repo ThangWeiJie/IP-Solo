@@ -14,6 +14,8 @@ public class AssessmentDAO {
     @Autowired
     private SessionFactory sessionFactory;
 
+    // -------------------- CONFIG --------------------
+
     public List<AssessmentConfig> findAllConfigs() {
         return sessionFactory.getCurrentSession()
                 .createQuery("FROM AssessmentConfig", AssessmentConfig.class)
@@ -27,6 +29,23 @@ public class AssessmentDAO {
                 .uniqueResult();
     }
 
+    public AssessmentConfig findConfigById(Long id) {
+        return sessionFactory.getCurrentSession().get(AssessmentConfig.class, id);
+    }
+
+    public void saveConfig(AssessmentConfig config) {
+        sessionFactory.getCurrentSession().saveOrUpdate(config);
+    }
+
+    public void deleteAssessment(Long id) {
+        AssessmentConfig assessment = findConfigById(id);
+        if (assessment != null) {
+            sessionFactory.getCurrentSession().delete(assessment);
+        }
+    }
+
+    // -------------------- OPTION --------------------
+
     public List<AssessmentOption> findOptionsByType(String type) {
         String hql = "FROM AssessmentOption WHERE testType = :type ORDER BY displayOrder ASC";
         return sessionFactory.getCurrentSession().createQuery(hql, AssessmentOption.class)
@@ -34,9 +53,22 @@ public class AssessmentDAO {
                 .getResultList();
     }
 
-    public void saveConfig(AssessmentConfig config) {
-        sessionFactory.getCurrentSession().saveOrUpdate(config);
+    public AssessmentOption findOptionById(Long id) {
+        return sessionFactory.getCurrentSession().get(AssessmentOption.class, id);
     }
+
+    public void saveOption(AssessmentOption option) {
+        sessionFactory.getCurrentSession().saveOrUpdate(option);
+    }
+
+    public void deleteOption(Long id) {
+        AssessmentOption opt = findOptionById(id);
+        if (opt != null) {
+            sessionFactory.getCurrentSession().delete(opt);
+        }
+    }
+
+    // -------------------- QUESTION --------------------
 
     public List<AssessmentQuestion> findByType(String type) {
         return sessionFactory.getCurrentSession()
@@ -52,6 +84,15 @@ public class AssessmentDAO {
     public void saveQuestion(AssessmentQuestion question) {
         sessionFactory.getCurrentSession().saveOrUpdate(question);
     }
+
+    public void deleteQuestion(Long id) {
+        AssessmentQuestion question = findById(id);
+        if (question != null) {
+            sessionFactory.getCurrentSession().delete(question);
+        }
+    }
+
+    // -------------------- SUBMISSION --------------------
 
     public void saveSubmission(UserAssessmentSubmission submission) {
         sessionFactory.getCurrentSession().save(submission);

@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/student/assessment")
-public class AssessmentController {
+public class StudentAssessmentController {
     @Autowired
     private AssessmentDAO assessmentDAO;
     @Autowired

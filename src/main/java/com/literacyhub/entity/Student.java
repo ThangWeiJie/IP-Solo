@@ -6,18 +6,40 @@ import javax.persistence.*;
 @Table(name = "students")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Student extends User {
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(name = "student_id")
+    private String studentID;
+
+    @Column(name = "major")
+    private String major;
+
+    @Column(name = "academic_year")
+    private String academicYear;
 
     public Student() {
         super();
     }
 
-    public String getEmail() {
-        return email;
+    public String getStudentID() {
+        return studentID;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStudentID(String studentID) {
+        this.studentID = studentID;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getAcademicYear() {
+        return academicYear;
+    }
+
+    public void setAcademicYear(String academicYear) {
+        this.academicYear = academicYear;
     }
 }

@@ -18,7 +18,7 @@ public class UserFactory {
         } else if ("PROFESSIONAL".equalsIgnoreCase(role)) {
             user = new Professional();
             user.setUserRole("PROFESSIONAL");
-            ((Professional) user).setLicenseId(dto.getLicenseId());
+            ((Professional) user).setProfessionalId(dto.getLicenseId());
             user.setStatus("PENDING");
         } else {
             throw new IllegalArgumentException("Unknown Role");

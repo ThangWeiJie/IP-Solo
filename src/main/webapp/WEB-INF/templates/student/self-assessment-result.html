@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-<div th:replace="~{fragments/headerfragment :: navbar('assessments')}"></div>
+<div th:replace="~{fragments/studentheaderfragment :: navbar('assessments')}"></div>
 
 <main class="container">
     <div class="dashboard-card" th:classappend="${result.colorClass}" style="padding: 30px; margin-top: 30px;">
@@ -24,6 +24,22 @@
             <strong>Category:</strong>
             <span th:text="${result.level}">Level</span>
         </p>
+
+        <div class="severity-scale-container">
+            <span class="scale-label">Overall Distress Level</span>
+
+            <div class="severity-scale">
+                <div class="scale-segment normal">Normal</div>
+                <div class="scale-segment mild">Mild</div>
+                <div class="scale-segment moderate">Moderate</div>
+                <div class="scale-segment severe">Severe</div>
+                <div class="scale-segment extreme">Extremely severe</div>
+            </div>
+
+            <div class="scale-indicator" th:classappend="${result.level.toLowerCase().replace(' ', '-')}">
+                ▲ You are here
+            </div>
+        </div>
 
         <p th:text="${result.recommendation}">
             Recommendation goes here.

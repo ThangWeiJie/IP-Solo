@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body th:attr="data-total-questions=${questions.size()}">
-<div th:replace="~{fragments/headerfragment :: navbar('assessments')}"></div>
+<div th:replace="~{fragments/studentheaderfragment :: navbar('assessments')}"></div>
 
 <main class="container assessment-container">
     <!-- Breadcrumb / Back Navigation -->

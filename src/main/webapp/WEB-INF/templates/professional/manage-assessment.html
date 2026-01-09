@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Manage Assessment</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+<div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+
+<main class="container">
+    <h4 th:text="'Manage Assessment: ' + ${testType}">Manage Assessment</h4>
+
+    <!-- Shared Options Section -->
+    <div class="dashboard-card" style="margin-top: 20px;">
+        <h5>Shared Options</h5>
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>Label</th>
+                <th>Value</th>
+                <th>Order</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Existing options -->
+            <tr th:each="opt : ${options}">
+                <td th:text="${opt.optionLabel}">Label</td>
+                <td th:text="${opt.optionValue}">Value</td>
+                <td th:text="${opt.displayOrder}">Order</td>
+                <td>
+                    <form th:action="@{/professional/assessments/options/delete/{id}(id=${opt.id})}" method="post">
+                        <button type="submit" class="btn-small red">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Add new option -->
+            <tr>
+                <form th:action="@{/professional/assessments/{testType}/options/save(testType=${testType})}" method="post">
+                    <td><input type="text" name="optionLabel" placeholder="Option Label" required/></td>
+                    <td><input type="number" name="optionValue" placeholder="Option Value" required/></td>
+                    <td><input type="number" name="displayOrder" placeholder="Order"/></td>
+                    <td><button type="submit" class="btn-small green">Add Option</button></td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Questions Section -->
+    <div class="dashboard-card" style="margin-top: 20px;">
+        <h5>Questions</h5>
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Existing questions -->
+            <tr th:each="q, iter : ${questions}">
+                <td th:text="${iter.count}">1</td>
+                <td th:text="${q.question}">Question text</td>
+                <td>
+                    <a th:href="@{/professional/assessments/questions/edit/{id}(id=${q.id})}" class="btn-small blue">Edit</a>
+                    <form th:action="@{/professional/assessments/questions/delete/{id}(id=${q.id})}" method="post" style="display:inline">
+                        <button type="submit" class="btn-small red">Delete</button>
+                    </form>
+                </td>
+            </tr>
+
+            <!-- Add new question -->
+            <tr>
+                <form th:action="@{/professional/assessments/{testType}/questions/save(testType=${testType})}" method="post">
+                    <td>#</td>
+                    <td><input type="text" name="question" placeholder="New question" required/></td>
+                    <td><button type="submit" class="btn-small green">Add Question</button></td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+<script th:src="@{/resources/js/materialize.js}"></script>
+</body>
+</html>
