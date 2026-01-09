@@ -40,7 +40,11 @@ public class Resource {
         this.createdAt = LocalDateTime.now();
     }
 
-    protected Resource() {}
+    public Resource() {}
+    
+    protected Resource(Long resourceId) {
+        this.resourceId = resourceId;
+    }
 
 
     public Long getResourceId() {

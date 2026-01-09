@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Resource</title>
+    <link rel="stylesheet" href="/resources/css/materialize.css"/>
+    <link rel="stylesheet" href="/resources/css/systemstyle.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
+    <style>
+        body { background-color: #f5f5f5; }
+        .form-container { max-width: 600px; margin: 40px auto; padding: 0 20px; }
+        .form-card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); padding: 32px; }
+        .page-title { color: #333; font-size: 2rem; font-weight: 300; margin: 0 0 8px 0; }
+        .page-subtitle { color: #999; font-size: 0.95rem; margin: 0 0 32px 0; }
+        
+        .form-section { margin-bottom: 28px; }
+        .form-section label { display: block; font-weight: 600; color: #333; margin-bottom: 8px; font-size: 0.95rem; }
+        .form-section input[type="text"],
+        .form-section textarea { width: 100%; padding: 12px; border: 2px solid #f0f0f0; border-radius: 6px; font-family: inherit; font-size: 1rem; transition: border-color 0.3s ease; box-sizing: border-box; }
+        .form-section input[type="text"]:focus,
+        .form-section textarea:focus { border-color: #667eea; outline: none; }
+        .form-section textarea { resize: vertical; min-height: 120px; }
+        
+        .file-input-wrapper { position: relative; border: 2px dashed #e0e0e0; border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s ease; background: #fafafa; }
+        .file-input-wrapper:hover { border-color: #667eea; background: #f5f7ff; }
+        .file-input-wrapper input[type="file"] { display: none; }
+        .file-input-wrapper i { font-size: 48px; color: #999; margin-bottom: 12px; }
+        .file-input-wrapper p { margin: 0; color: #666; }
+        .file-input-wrapper .file-name { color: #667eea; font-weight: 600; margin-top: 8px; }
+        
+        .form-actions { display: flex; gap: 12px; margin-top: 32px; }
+        .form-actions .btn { flex: 1; height: 44px; line-height: 44px; border-radius: 6px; }
+        
+        .current-file { background: #f0f7ff; border: 1px solid #e3f2fd; border-radius: 6px; padding: 12px; margin-bottom: 12px; color: #1976d2; font-size: 0.9rem; }
+        
+        @media (max-width: 600px) {
+            .form-card { padding: 24px; }
+            .page-title { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{fragments/profheaderfragment :: navbar('resources')}"></div>
+
+<div class="form-container">
+    <div class="form-card">
+        <h3 class="page-title"><i class="material-icons" style="vertical-align:middle; margin-right:8px; font-size:2rem;">edit</i></h3>
+        <h3 class="page-title">Edit Resource</h3>
+        <p class="page-subtitle">Update resource information</p>
+
+        <form th:action="@{'/professional/resources/' + ${resource.resourceId} + '/edit'}" method="post" enctype="multipart/form-data">
+            <div class="form-section">
+                <label for="title"><i class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">title</i>Title</label>
+                <input type="text" name="title" id="title" th:value="${resource.title}" placeholder="Enter resource title" required/>
+            </div>
+
+            <div class="form-section">
+                <label for="category"><i class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">label</i>Category</label>
+                <select name="category" id="category" class="browser-default" style="padding: 12px; border: 2px solid #f0f0f0; border-radius: 6px; font-family: inherit; font-size: 1rem;" required>
+                    <option value="">Select a category</option>
+                    <option value="Anxiety & Stress" th:selected="${resource.category == 'Anxiety & Stress'}">Anxiety & Stress</option>
+                    <option value="Depression" th:selected="${resource.category == 'Depression'}">Depression</option>
+                    <option value="Self-Care & Wellness" th:selected="${resource.category == 'Self-Care & Wellness'}">Self-Care & Wellness</option>
+                    <option value="Mindfulness & Meditation" th:selected="${resource.category == 'Mindfulness & Meditation'}">Mindfulness & Meditation</option>
+                    <option value="Sleep & Rest" th:selected="${resource.category == 'Sleep & Rest'}">Sleep & Rest</option>
+                    <option value="Emotional Regulation" th:selected="${resource.category == 'Emotional Regulation'}">Emotional Regulation</option>
+                    <option value="Social Skills" th:selected="${resource.category == 'Social Skills'}">Social Skills</option>
+                    <option value="Crisis Support" th:selected="${resource.category == 'Crisis Support'}">Crisis Support</option>
+                    <option value="Trauma & PTSD" th:selected="${resource.category == 'Trauma & PTSD'}">Trauma & PTSD</option>
+                    <option value="Substance Abuse" th:selected="${resource.category == 'Substance Abuse'}">Substance Abuse</option>
+                    <option value="Eating Disorders" th:selected="${resource.category == 'Eating Disorders'}">Eating Disorders</option>
+                    <option value="Relationships" th:selected="${resource.category == 'Relationships'}">Relationships</option>
+                    <option value="Academic Stress" th:selected="${resource.category == 'Academic Stress'}">Academic Stress</option>
+                    <option value="Coping Strategies" th:selected="${resource.category == 'Coping Strategies'}">Coping Strategies</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <label for="description"><i class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">description</i>Description</label>
+                <textarea name="description" id="description" placeholder="Describe what this resource contains..." th:text="${resource.description}"></textarea>
+            </div>
+
+            <div class="form-section">
+                <label><i class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">attach_file</i>Update File (Optional)</label>
+                <div th:if="${resource.fileURL}" class="current-file">
+                    <i class="material-icons" style="font-size:16px; vertical-align:middle;">description</i>
+                    <strong>Current file:</strong> <span th:text="${resource.fileURL}">file.pdf</span>
+                </div>
+                <div class="file-input-wrapper" onclick="document.getElementById('fileInput').click();">
+                    <i class="material-icons">upload_file</i>
+                    <p>Click to upload new file or drag and drop</p>
+                    <p style="font-size:0.85rem; color:#999; margin-top:4px;">Leave empty to keep current file</p>
+                    <input type="file" id="fileInput" name="file" onchange="updateFileName(this)"/>
+                    <div class="file-name" id="fileName"></div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button class="btn indigo darken-1 waves-effect waves-light" type="submit">
+                    <i class="material-icons left">check_circle</i>Save Changes
+                </button>
+                <a class="btn-flat grey-text waves-effect waves-light" th:href="@{/professional/resources}">
+                    <i class="material-icons left">close</i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateFileName(input) {
+        const fileName = document.getElementById('fileName');
+        if (input.files && input.files[0]) {
+            fileName.textContent = '✓ ' + input.files[0].name;
+        }
+    }
+</script>
+</body>
+</html>

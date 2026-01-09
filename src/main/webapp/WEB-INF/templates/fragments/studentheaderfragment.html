@@ -25,7 +25,7 @@
                 <a href="/dashboard">Dashboard</a>
             </li>
             <li th:class="${activePage == 'resources' ? 'active' : ''}">
-                <a href="/resources">Resources</a>
+                <a th:href="@{/student/resources}">Resources</a>
             </li>
             <li th:class="${activePage == 'assessment' ? 'active' : ''}">
                 <a th:href="@{/student/assessment/list}">Self Assessment</a>
