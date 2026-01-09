@@ -51,6 +51,16 @@ public class ResourceController {
         return "student/resources";
     }
 
+    @GetMapping("/student/resources/{id}")
+    public String studentResourceDetail(@PathVariable("id") Long id, HttpSession session, Model model) {
+        if (sessionExpired(session, "STUDENT")) return "redirect:/login?error=denied";
+
+        Resource res = resourceDAO.findById(id);
+        if (res == null) return "redirect:/student/resources?error=notfound";
+        model.addAttribute("resource", res);
+        return "student/resource-detail";
+    }
+
     // PROFESSIONAL: list with manage actions
     @GetMapping("/professional/resources")
     public String professionalResources(@RequestParam(value = "q", required = false) String q,

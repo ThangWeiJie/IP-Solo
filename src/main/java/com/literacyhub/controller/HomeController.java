@@ -29,6 +29,19 @@ public class HomeController {
         return "admin/adminhomepage";
     }
 
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) return "redirect:/login?error=denied";
+
+        String role = user.getUserRole();
+        if ("STUDENT".equalsIgnoreCase(role)) return "redirect:/student/home";
+        if ("PROFESSIONAL".equalsIgnoreCase(role)) return "redirect:/professional/home";
+        if ("ADMIN".equalsIgnoreCase(role)) return "redirect:/admin/home";
+
+        return "redirect:/login?error=denied";
+    }
+
     private boolean sessionExpired(HttpSession session, String requiredRole) {
         User user = (User) session.getAttribute("user");
         return user == null || !requiredRole.equalsIgnoreCase(user.getUserRole());

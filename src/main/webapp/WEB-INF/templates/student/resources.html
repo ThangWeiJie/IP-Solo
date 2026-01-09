@@ -39,6 +39,7 @@
         
         .resource-body { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; }
         .resource-body p { color: #666; font-size: 0.95rem; margin: 0 0 16px 0; flex-grow: 1; }
+        .desc-clamp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         
         .resource-footer { padding: 0 16px 16px 16px; }
         .resource-footer .btn { width: 100%; margin: 0; }
@@ -100,11 +101,14 @@
                 <h5 th:text="${r.title}">Title</h5>
             </div>
             <div class="resource-body">
-                <p th:text="${r.description}">Description</p>
+                <p class="desc-clamp" th:text="${r.description}">Description</p>
             </div>
-            <div class="resource-footer">
+            <div class="resource-footer" style="display:flex; gap:10px;">
                 <a class="btn indigo darken-1 waves-effect waves-light" th:href="@{'/resource/download/' + ${r.resourceId}}" target="_blank">
                     <i class="material-icons left">download</i>Open Resource
+                </a>
+                <a class="btn white indigo-text text-darken-1 waves-effect" th:href="@{'/student/resources/' + ${r.resourceId}}" target="_blank">
+                    <i class="material-icons left">open_in_new</i>View Details
                 </a>
             </div>
         </div>
