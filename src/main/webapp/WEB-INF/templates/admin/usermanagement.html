@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management | LiteracyHub</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+<div th:replace="~{fragments/adminheaderfragment :: navbar('usermanagement')}"></div>
+
+<main>
+    <div class="management-container">
+        <div class="row">
+            <div class="col s12">
+                <ul class="tabs card-panel">
+                    <li class="tab col s6"><a class="active" href="#allUsers">All Registered Users</a></li>
+                    <li class="tab col s6">
+                        <a href="#approvals">
+                            Pending Approvals
+                            <span class="new badge red" th:if="${not #lists.isEmpty(pendingProfessionals)}"
+                                  th:text="${#lists.size(pendingProfessionals)}">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div id="allUsers" class="col s12">
+                <div class="card-panel">
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="u : ${users}">
+                            <td th:text="${u.id}">1</td>
+                            <td><strong th:text="${u.firstName + ' ' + u.lastName}">Name</strong></td>
+                            <td th:text="${u.email}">email@example.com</td>
+                            <td><span class="chip" th:text="${u.userRole}">ROLE</span></td>
+                            <td>
+                                        <span th:classappend="${u.status == 'ACTIVE' ? 'status-active' : 'status-pending'}"
+                                              class="status-pill" th:text="${u.status}">STATUS</span>
+                            </td>
+                            <td th:text="${#temporals.format(u.createdAt, 'dd/MM/yyyy')}">Date</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="approvals" class="col s12">
+                <div class="card-panel">
+                    <table class="highlight">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Credential</th>
+                            <th>Department</th>
+                            <th>Document</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="prof : ${pendingProfessionals}">
+                            <td th:text="${prof.firstName + ' ' + prof.lastName}">Name</td>
+                            <td th:text="${prof.qualification}">PhD</td>
+                            <td th:text="${prof.department}">Psychology</td>
+                            <td>
+                                <a th:href="@{'/' + ${prof.verificationDocument}}" target="_blank" class="doc-link">
+                                    <i class="material-icons">picture_as_pdf</i> View
+                                </a>
+                            </td>
+                            <td class="action-cell">
+                                <form th:action="@{/admin/users/approve}" method="post" style="margin:0;">
+                                    <input type="hidden" name="userId" th:value="${prof.id}"/>
+                                    <button type="submit" class="btn-small green waves-effect waves-light">
+                                        <i class="material-icons">check</i>
+                                    </button>
+                                </form>
+                                <form th:action="@{/admin/users/reject}" method="post" style="margin:0;">
+                                    <input type="hidden" name="userId" th:value="${prof.id}"/>
+                                    <button type="submit" class="btn-small red waves-effect waves-light">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.AutoInit(document.body);
+    });
+</script>
+</body>
+</html>

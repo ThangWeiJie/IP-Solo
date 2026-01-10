@@ -1,13 +1,12 @@
 package com.literacyhub.entity;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "professionals")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Professional extends User {
-    @Column(name = "professional_id")
+    @Column(name = "license_id")
     private String professionalId;
 
     @Column(name = "specialization")
@@ -62,7 +61,7 @@ public class Professional extends User {
         return verificationDocument;
     }
 
-    public void setVerification_document(String verification_document) {
+    public void setVerificationDocument(String verificationDocument) {
         this.verificationDocument = verificationDocument;
     }
 }

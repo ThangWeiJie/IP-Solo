@@ -81,7 +81,7 @@ public class AuthController {
 
                 String pathOnDisk = saveVerificationDocument(file, registrationDTO.getEmail());
                 System.out.println("PATH GENERATED: " + pathOnDisk);
-                professional.setVerification_document(pathOnDisk);
+                professional.setVerificationDocument(pathOnDisk);
             }
 
             userDAO.save(newUser);
