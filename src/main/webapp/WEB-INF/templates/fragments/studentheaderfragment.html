@@ -19,10 +19,7 @@
 
         <ul class="right">
             <li th:class="${activePage == 'home' ? 'active' : ''}">
-                <a href="/">Home</a>
-            </li>
-            <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
-                <a href="/dashboard">Dashboard</a>
+                <a th:href="@{/}">Home</a>
             </li>
             <li th:class="${activePage == 'resources' ? 'active' : ''}">
                 <a th:href="@{/student/resources}">Resources</a>

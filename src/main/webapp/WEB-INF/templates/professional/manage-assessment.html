@@ -9,7 +9,21 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-<div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+<header>
+    <div th:switch="${userRole}">
+        <div th:case="'professional'">
+            <div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+        </div>
+
+        <div th:case="'admin'">
+            <div th:replace="~{fragments/adminheaderfragment :: navbar('assessments')}"></div>
+        </div>
+
+        <div th:case="*">
+            <p style="color:red; text-align:center;">Warning: No valid role detected! ([[${userRole}]])</p>
+        </div>
+    </div>
+</header>
 
 <main class="container">
     <h4 th:text="'Manage Assessment: ' + ${testType}">Manage Assessment</h4>
@@ -33,7 +47,8 @@
                 <td th:text="${opt.optionValue}">Value</td>
                 <td th:text="${opt.displayOrder}">Order</td>
                 <td>
-                    <form th:action="@{/professional/assessments/options/delete/{id}(id=${opt.id})}" method="post">
+                    <form th:action="@{/{role}/assessments/option/delete/{id}(role=${userRole}, id=${opt.id})}" method="post">
+                        <input type="hidden" name="testType" th:value="${testType}"/>
                         <button type="submit" class="btn-small red">Delete</button>
                     </form>
                 </td>
@@ -41,7 +56,7 @@
 
             <!-- Add new option -->
             <tr>
-                <form th:action="@{/professional/assessments/{testType}/options/save(testType=${testType})}" method="post">
+                <form th:action="@{/{role}/assessments/{testType}/options/save(role=${userRole}, testType=${testType})}" method="post">
                     <td><input type="text" name="optionLabel" placeholder="Option Label" required/></td>
                     <td><input type="number" name="optionValue" placeholder="Option Value" required/></td>
                     <td><input type="number" name="displayOrder" placeholder="Order"/></td>
@@ -64,24 +79,46 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Existing questions -->
             <tr th:each="q, iter : ${questions}">
                 <td th:text="${iter.count}">1</td>
                 <td th:text="${q.question}">Question text</td>
                 <td>
-                    <a th:href="@{/professional/assessments/questions/edit/{id}(id=${q.id})}" class="btn-small blue">Edit</a>
-                    <form th:action="@{/professional/assessments/questions/delete/{id}(id=${q.id})}" method="post" style="display:inline">
+                    <a th:href="@{/{role}/assessments/question/edit/{id}(role=${userRole}, id=${q.id})}" class="btn-small blue">Edit</a>
+
+                    <form th:action="@{/{role}/assessments/question/delete/{id}(role=${userRole}, id=${q.id})}" method="post" style="display:inline">
+                        <input type="hidden" name="testType" th:value="${testType}"/>
                         <button type="submit" class="btn-small red">Delete</button>
                     </form>
                 </td>
             </tr>
 
-            <!-- Add new question -->
-            <tr>
-                <form th:action="@{/professional/assessments/{testType}/questions/save(testType=${testType})}" method="post">
-                    <td>#</td>
-                    <td><input type="text" name="question" placeholder="New question" required/></td>
-                    <td><button type="submit" class="btn-small green">Add Question</button></td>
+            <tr th:style="${newQuestion.id != null ? 'background-color: #e3f2fd;' : ''}">
+                <!--/*@thymesVar id="newQuestion" type="com.literacyhub.entity.AssessmentQuestion"*/-->
+                <form th:action="@{/{role}/assessments/{testType}/questions/save(role=${userRole}, testType=${testType})}"
+                      method="post"
+                      th:object="${newQuestion}">
+
+                    <input type="hidden" th:field="*{id}" />
+                    <input type="hidden" th:field="*{category}" />
+
+                    <td>
+                        <span th:if="${newQuestion.id != null}" class="blue-text"><b>EDIT</b></span>
+                        <span th:if="${newQuestion.id == null}">#</span>
+                    </td>
+                    <td>
+                        <input type="text" th:field="*{question}" placeholder="New question" required/>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn-small"
+                                th:classappend="${newQuestion.id != null} ? 'orange' : 'green'"
+                                th:text="${newQuestion.id != null} ? 'Update' : 'Add Question'">
+                            Action
+                        </button>
+
+                        <a th:if="${newQuestion.id != null}"
+                           th:href="@{/{role}/assessments/{testType}(role=${userRole}, testType=${testType})}"
+                           class="btn-small grey">Cancel</a>
+                    </td>
                 </form>
             </tr>
             </tbody>
@@ -91,5 +128,17 @@
 </main>
 
 <script th:src="@{/resources/js/materialize.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var msg = /*[[${message}]]*/ null;
+    if (msg) {
+        M.toast({
+            html: msg,
+            displayLength: 4000,
+            classes: 'rounded green'
+        });
+    }
+    /*]]>*/
+</script>
 </body>
 </html>

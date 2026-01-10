@@ -5,22 +5,28 @@ import com.literacyhub.entity.AssessmentConfig;
 import com.literacyhub.entity.AssessmentOption;
 import com.literacyhub.entity.AssessmentQuestion;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@Component
-@RequestMapping("/professional/assessments")
+@Controller
+@RequestMapping("/{role}/assessments")
 public class ProfAssessmentController {
     @Autowired
     private AssessmentDAO assessmentDAO;
 
+    @ModelAttribute
+    public void setupRole(@PathVariable String role, Model model) {
+        model.addAttribute("userRole", role);
+    }
+
     /** ---------------------- ASSESSMENT CRUD ---------------------- **/
 
     @GetMapping("/list")
-    public String listAllAssessments(Model model) {
+    public String listAllAssessments(@PathVariable String role, Model model) {
         List<AssessmentConfig> configs = assessmentDAO.findAllConfigs();
         model.addAttribute("assessments", configs);
         model.addAttribute("title", "Manage Assessments");
@@ -37,10 +43,10 @@ public class ProfAssessmentController {
 
     // Show form for editing an existing assessment
     @GetMapping("/edit/{id}")
-    public String editAssessmentForm(@PathVariable Long id, Model model) {
+    public String editAssessmentForm(@PathVariable String role, @PathVariable Long id, Model model) {
         AssessmentConfig assessment = assessmentDAO.findConfigById(id);
         if (assessment == null) {
-            return "redirect:/professional/assessments";
+            return "redirect:/" + role + "/assessments/list";
         }
         model.addAttribute("assessment", assessment);
         model.addAttribute("formTitle", "Edit Assessment");
@@ -48,9 +54,9 @@ public class ProfAssessmentController {
     }
 
     @PostMapping("/save")
-    public String saveAssessment(@ModelAttribute AssessmentConfig assessment) {
+    public String saveAssessment(@PathVariable String role, @ModelAttribute AssessmentConfig assessment) {
         assessmentDAO.saveConfig(assessment);
-        return "redirect:/professional/assessments/list";
+        return "redirect:/" + role + "/assessments/list";
     }
 
     @PostMapping("/delete/{id}")
@@ -62,7 +68,7 @@ public class ProfAssessmentController {
     /** ---------------------- QUESTION CRUD ---------------------- **/
 
     @GetMapping("/{testType}")
-    public String manageAssessment(@PathVariable String testType, Model model) {
+    public String manageAssessment(@PathVariable String role, @PathVariable String testType, Model model) {
         List<AssessmentQuestion> questions = assessmentDAO.findByType(testType);
         List<AssessmentOption> options = assessmentDAO.findOptionsByType(testType);
 
@@ -80,8 +86,10 @@ public class ProfAssessmentController {
 
     @PostMapping("/{testType}/questions/save")
     public String saveQuestion(
+            @PathVariable String role,
             @ModelAttribute AssessmentQuestion newQuestion,
-            @PathVariable String testType
+            @PathVariable String testType,
+            RedirectAttributes ra
     ) {
         newQuestion.setType(testType);
 
@@ -91,24 +99,30 @@ public class ProfAssessmentController {
 
         assessmentDAO.saveQuestion(newQuestion);
 
-        return "redirect:/professional/assessments/" + testType;
+        String msg = (newQuestion.getId() != null) ? "Question updated!" : "Question added!";
+        ra.addFlashAttribute("message", msg);
+
+        return "redirect:/" + role + "/assessments/" + testType;
     }
 
     @PostMapping("/question/delete/{id}")
     public String deleteQuestion(
+            @PathVariable String role,
             @PathVariable Long id,
-            @RequestParam String testType
+            @RequestParam String testType,
+            RedirectAttributes ra
     ) {
         assessmentDAO.deleteQuestion(id);
-        return "redirect:/professional/assessments/" + testType;
+        ra.addFlashAttribute("message", "Question deleted successfully");
+        return "redirect:/" + role + "/assessments/" + testType;
     }
 
     @GetMapping("/question/edit/{id}")
-    public String editQuestion(@PathVariable Long id, Model model) {
+    public String editQuestion(@PathVariable String role, @PathVariable Long id, Model model) {
         AssessmentQuestion question = assessmentDAO.findById(id);
 
         if (question == null) {
-            return "redirect:/professional/assessments/list";
+            return "redirect:/" + role + "/assessments/list";
         }
 
         model.addAttribute("newQuestion", question);
@@ -121,17 +135,19 @@ public class ProfAssessmentController {
 
     /** ---------------------- OPTIONS CRUD ---------------------- **/
     @PostMapping("/{testType}/options/save")
-    public String saveOption(@ModelAttribute AssessmentOption newOption,
+    public String saveOption(@PathVariable String role,
+                             @ModelAttribute AssessmentOption newOption,
                              @PathVariable String testType) {
         newOption.setTestType(testType);
         assessmentDAO.saveOption(newOption);
-        return "redirect:/professional/assessments/" + testType;
+        return "redirect:/" + role + "/assessments/" + testType;
     }
 
     @PostMapping("/option/delete/{id}")
-    public String deleteOption(@PathVariable Long id,
+    public String deleteOption(@PathVariable String role,
+                               @PathVariable Long id,
                                @RequestParam String testType) {
         assessmentDAO.deleteOption(id);
-        return "redirect:/professional/assessments/" + testType;
+        return "redirect:/" + role + "/assessments/" + testType;
     }
 }

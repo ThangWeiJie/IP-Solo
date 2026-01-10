@@ -5,16 +5,17 @@ import com.literacyhub.UserFactory;
 import com.literacyhub.dao.UserDAO;
 import com.literacyhub.dto.LoginDTO;
 import com.literacyhub.dto.RegistrationDTO;
+import com.literacyhub.entity.Professional;
 import com.literacyhub.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 public class AuthController {
@@ -68,9 +69,20 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String processRegister(@ModelAttribute("regData") RegistrationDTO registrationDTO, Model model) {
+    public String processRegister(
+            @ModelAttribute("regData") RegistrationDTO registrationDTO,
+            @RequestParam("verificationDocument") MultipartFile file,
+            Model model) {
         try {
             User newUser = userFactory.createNewUser(registrationDTO.getUserRole(), registrationDTO);
+
+            if (newUser instanceof Professional && file != null && !file.isEmpty()) {
+                Professional professional = (Professional) newUser;
+
+                String pathOnDisk = saveVerificationDocument(file, registrationDTO.getEmail());
+                System.out.println("PATH GENERATED: " + pathOnDisk);
+                professional.setVerification_document(pathOnDisk);
+            }
 
             userDAO.save(newUser);
 
@@ -83,6 +95,7 @@ public class AuthController {
         catch(Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Registration failed. Email might already be in use.");
+//            model.addAttribute("regData", registrationDTO);
             return "register";
         }
     }
@@ -94,5 +107,22 @@ public class AuthController {
         }
 
         return "redirect:/login";
+    }
+
+    private String saveVerificationDocument(MultipartFile file, String email) throws IOException {
+        String UPLOAD_DIR = "uploads/verifications/";
+
+        java.io.File directory = new File(UPLOAD_DIR);
+
+        if(!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        String filename = email.replaceAll("[^a-zA-Z0-9]", "_") + "_" + System.currentTimeMillis() + ".pdf";
+        java.nio.file.Path path = java.nio.file.Paths.get(UPLOAD_DIR + filename);
+
+        java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        return UPLOAD_DIR + filename;
     }
 }

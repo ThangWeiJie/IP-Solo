@@ -1,5 +1,7 @@
 package com.literacyhub.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class RegistrationDTO {
     private String firstName;
     private String lastName;
@@ -7,7 +9,18 @@ public class RegistrationDTO {
     private String password;
     private String confirmPassword;
     private String userRole;
-    private String licenseId;
+
+    // Student Specific Fields
+    private String studentId;
+    private String major;
+    private String academicYear;
+
+    // Professional Specific Fields
+    private String professionalId; // Replaces or complements licenseId
+    private String department;
+    private String qualification;
+    private String specialization;
+    private MultipartFile verificationDocument;
 
     public String getFirstName() {
         return firstName;
@@ -51,11 +64,60 @@ public class RegistrationDTO {
         this.userRole = userRole;
     }
 
-    public String getLicenseId() {
-        return licenseId;
+    public String getStudentId() {
+        return studentId;
+    }
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
-    public void setLicenseId(String licenseId) {
-        this.licenseId = licenseId;
+    public String getMajor() {
+        return major;
+    }
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getAcademicYear() {
+        return academicYear;
+    }
+    public void setAcademicYear(String academicYear) {
+        this.academicYear = academicYear;
+    }
+
+    public String getProfessionalId() {
+        return professionalId;
+    }
+    public void setProfessionalId(String professionalId) {
+        this.professionalId = professionalId;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public MultipartFile getVerificationDocument() {
+        return verificationDocument;
+    }
+
+    public void setVerificationDocument(MultipartFile verificationDocument) {
+        this.verificationDocument = verificationDocument;
     }
 }

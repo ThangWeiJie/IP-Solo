@@ -3,73 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${formTitle}">Add/Edit Assessment</title>
+    <title th:text="${title}">Manage Assessments</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-<div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+<header>
+    <div th:switch="${userRole}">
+        <div th:case="'professional'">
+            <div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+        </div>
 
+        <div th:case="'admin'">
+            <div th:replace="~{fragments/adminheaderfragment :: navbar('assessments')}"></div>
+        </div>
+
+        <div th:case="*">
+            <p style="color:red; text-align:center;">Warning: No valid role detected! ([[${userRole}]])</p>
+        </div>
+    </div>
+</header>
 <main class="container">
     <div class="dashboard-card" style="padding: 30px; margin-top: 30px;">
-        <h4 th:text="${formTitle}">Add New Assessment</h4>
+        <h4 th:text="${title}">Manage Assessments</h4>
 
-        <form th:action="@{/professional/assessments/save}" method="post">
-            <!-- Hidden ID for edit -->
-            <input type="hidden" name="id" th:value="${assessment.id}" />
+        <!-- List of all assessments -->
+        <ul class="collection">
+            <li class="collection-item" th:each="config : ${assessments}">
+                <span th:text="${config.testName}">Assessment Name</span>
 
-            <div class="input-field">
-                <input type="text" name="testName" required th:value="${assessment.testName}">
-                <label>Assessment Name</label>
-            </div>
+                <!-- Button to manage questions for this test type -->
+                <a th:href="@{/{role}/assessments/{type}(role=${userRole}, type=${config.testType})}"
+                   class="secondary-content btn-small indigo waves-effect waves-light">
+                    Manage Questions
+                    <i class="material-icons right">arrow_forward</i>
+                </a>
+            </li>
+        </ul>
 
-            <div class="input-field">
-                <input type="text" name="testType" required th:value="${assessment.testType}">
-                <label>Test Type (unique identifier)</label>
-            </div>
-
-            <div class="input-field">
-                <textarea name="instructions" class="materialize-textarea"
-                          th:text="${assessment.instructions}"></textarea>
-                <label>Instructions</label>
-            </div>
-
-            <div class="input-field">
-                <input type="number" name="multiplier" required min="1" th:value="${assessment.multiplier}">
-                <label>Multiplier (score scaling)</label>
-            </div>
-
-            <div class="input-field">
-                <select name="scoringType">
-                    <option value="total" th:selected="${assessment.scoringType == 'total'}">Total Score</option>
-                    <option value="subscale" th:selected="${assessment.scoringType == 'subscale'}">Subscale</option>
-                </select>
-                <label>Scoring Type</label>
-            </div>
-
-            <div class="input-field">
-                <textarea name="scoringJSON" class="materialize-textarea"
-                          th:text="${assessment.scoringJSON}"></textarea>
-                <label>Scoring JSON (optional)</label>
-                <span class="helper-text">Provide JSON if using custom scoring ranges</span>
-            </div>
-
-            <button type="submit" class="btn waves-effect waves-light indigo darken-2">
-                <span th:text="${assessment.id} == null ? 'Add Assessment' : 'Save Changes'">Save</span>
-                <i class="material-icons right">save</i>
-            </button>
-        </form>
+        <!-- Optional: Add new assessment button -->
+        <div style="margin-top: 20px;">
+            <a th:href="@{/{role}/assessments/new(role=${userRole})}" class="btn waves-effect waves-light green">
+                Add New Assessment
+                <i class="material-icons right">add</i>
+            </a>
+        </div>
     </div>
 </main>
 
 <script th:src="@{/resources/js/materialize.js}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('select');
-        M.FormSelect.init(elems);
-        M.updateTextFields();
-    });
-</script>
 </body>
 </html>

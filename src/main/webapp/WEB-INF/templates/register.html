@@ -3,98 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Literacy Hub | Join Us</title>
+    <title>Literacy Hub | Registration</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/resources/css/materialize.css}" media="screen,projection">
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
-<body>
-<main>
-    <div class="card login-card z-depth-3">
+<body class="grey lighten-4">
 
-        <div class="center-align brand-logo-container">
-            <i class="material-icons large indigo-question question-darken-2">person_add_alt</i>
-            <h4 class="indigo-question question-darken-2" style="margin-top: 0;">Create Account</h4>
-            <p class="grey-question">Join our community to start your journey</p>
-        </div>
+<div class="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="row">
+        <div class="col s12 m10 offset-m1 l8 offset-l2">
+            <div class="card-panel z-depth-2" style="border-radius: 12px; padding: 40px;">
 
-        <div th:if="${error}" class="card-panel red lighten-4 red-question question-darken-4 z-depth-0"
-             style="padding: 10px; border-radius: 8px; border: 1px solid #ef9a9a; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center;">
-                <i class="material-icons" style="margin-right: 10px;">error_outline</i>
-                <span th:question="${error}">Registration Error</span>
+                <div class="center-align mb-4">
+                    <h4 class="indigo-text text-darken-4"><strong>Create Account</strong></h4>
+                    <p class="grey-text text-darken-1">Join the Literacy Hub Community</p>
+                </div>
+
+                <div th:if="${error}" class="card-panel red lighten-4 red-text text-darken-4" style="border-radius: 8px;">
+                    <i class="material-icons left">error</i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <!--/*@thymesVar id="regData" type="com.literacyhub.dto.RegistrationDTO"*/-->
+                <form th:action="@{/register}" th:object="${regData}" method="post" enctype="multipart/form-data" id="registerForm">
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">email</i>
+                            <input type="email" th:field="*{email}" id="email" required class="validate">
+                            <label for="email">E-mail Address</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input type="text" th:field="*{firstName}" id="firstName" required class="validate">
+                            <label for="firstName">First Name</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input type="text" th:field="*{lastName}" id="lastName" required class="validate">
+                            <label for="lastName">Last Name</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">lock</i>
+                            <input type="password" th:field="*{password}" id="password" required class="validate">
+                            <label for="password">Password</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">lock_outline</i>
+                            <input type="password" name="confirmPassword" id="confirmPassword" required class="validate">
+                            <label for="confirmPassword">Confirm Password</label>
+                        </div>
+                    </div>
+
+                    <div class="grey lighten-5" style="border-radius: 8px; border: 1px solid #e0e0e0; margin: 20px 0; padding: 20px;">
+                        <label class="black-text" style="font-size: 1.1rem;"><strong>I am a:</strong></label>
+                        <div style="margin-top: 15px;">
+                            <label style="margin-right: 40px;">
+                                <input th:field="*{userRole}" type="radio" value="STUDENT" onclick="toggleRoleFields()" id="studentRadio" checked />
+                                <span class="black-text">Student</span>
+                            </label>
+                            <label>
+                                <input th:field="*{userRole}" type="radio" value="PROFESSIONAL" onclick="toggleRoleFields()" id="profRadio" />
+                                <span class="black-text">Professional</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="studentSection" class="blue lighten-5" style="border-radius: 8px; padding: 20px; border: 1px solid #bbdefb;">
+                        <h6 class="indigo-text"><strong>Student Details</strong></h6>
+                        <div class="row" style="margin-bottom: 0;">
+                            <div class="input-field col s12">
+                                <input type="text" th:field="*{studentId}" id="studentId">
+                                <label for="studentId">Student ID (e.g., S12345)</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input type="text" th:field="*{major}" id="major">
+                                <label for="major">Major / Field of Study</label>
+                            </div>
+                            <div class="col s12">
+                                <label>Academic Year</label>
+                                <select th:field="*{academicYear}" class="browser-default" style="margin-top: 5px; border: 1px solid #9e9e9e; border-radius: 4px;">
+                                    <option value="" disabled selected>Choose your year</option>
+                                    <option value="Year 1">Year 1</option>
+                                    <option value="Year 2">Year 2</option>
+                                    <option value="Year 3">Year 3</option>
+                                    <option value="Year 4">Year 4</option>
+                                    <option value="Graduate">Graduate</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="verificationSection" class="teal lighten-5" style="border-radius: 8px; padding: 20px; border: 1px solid #b2dfdb; display: none;">
+                        <h6 class="teal-text text-darken-4"><strong>Professional Verification</strong></h6>
+
+                        <div class="file-field input-field">
+                            <div class="btn indigo darken-2">
+                                <span>Upload Document</span>
+                                <input type="file" th:field="*{verificationDocument}" id="verificationFile" accept=".pdf,.jpg,.jpeg,.png">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text" placeholder="Upload Certificate or ID (PDF/Image)">
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-bottom: 0;">
+                            <div class="input-field col s12">
+                                <input type="text" th:field="*{professionalId}" id="professionalId">
+                                <label for="professionalId">Professional ID Number</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="text" th:field="*{department}" id="department">
+                                <label for="department">Department</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="text" th:field="*{qualification}" id="qualification">
+                                <label for="qualification">Qualification</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input type="text" th:field="*{specialization}" id="specialization">
+                                <label for="specialization">Specialization (e.g. Psychology, IT)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="center-align" style="margin-top: 40px;">
+                        <button type="submit" class="btn indigo darken-4 waves-effect waves-light btn-large"
+                                style="width: 100%; border-radius: 8px;"
+                                onclick="return validateForm()">
+                            Create Account
+                        </button>
+                        <p style="margin-top: 20px;">
+                            <a th:href="@{/login}" class="indigo-text">Already have an account? <strong>Login</strong></a>
+                        </p>
+                    </div>
+                </form>
             </div>
-        </div>
-
-        <!--/*@thymesVar id="regData" type="com.literacyhub.dto.RegistrationDTO"*/-->
-        <form th:action="@{/register}" th:object="${regData}" method="POST">
-
-            <div class="input-field">
-                <i class="material-icons prefix">person</i>
-                <input id="firstName" type="question" th:field="*{firstName}" required class="validate">
-                <label for="firstName">First Name</label>
-            </div>
-
-            <div class="input-field">
-                <i class="material-icons prefix">person_outline</i>
-                <input id="lastName" type="question" th:field="*{lastName}" required class="validate">
-                <label for="lastName">Last Name</label>
-            </div>
-
-            <div class="input-field">
-                <i class="material-icons prefix">alternate_email</i>
-                <input id="email" type="email" th:field="*{email}" required class="validate">
-                <label for="email">Email Address</label>
-            </div>
-
-            <div class="input-field">
-                <i class="material-icons prefix">assignment_ind</i>
-                <select th:field="*{userRole}" id="roleSelect" class="browser-default"
-                        style="margin-left: 3rem; width: calc(100% - 3rem); border: none; border-bottom: 1px solid #9e9e9e;">
-                    <option value="" disabled selected>Register as...</option>
-                    <option value="STUDENT">Student (Instant Access)</option>
-                    <option value="PROFESSIONAL">Professional (Requires Admin Review)</option>
-                </select>
-            </div>
-
-            <div id="licenseWrapper" style="display:none;" class="input-field">
-                <i class="material-icons prefix">verified_user</i>
-                <input id="licenseId" type="question" th:field="*{licenseId}">
-                <label for="licenseId">License ID (Pros Only)</label>
-            </div>
-
-            <div class="input-field">
-                <i class="material-icons prefix">lock_outline</i>
-                <input id="password" type="password" th:field="*{password}" required class="validate">
-                <label for="password">Password</label>
-            </div>
-
-            <button class="btn btn-large waves-effect waves-light indigo darken-2 btn-login" type="submit">
-                Register Now
-                <i class="material-icons right">how_to_reg</i>
-            </button>
-        </form>
-
-        <div class="center-align" style="margin-top: 30px;">
-            <span class="grey-question question-darken-1">Already part of the hub?</span>
-            <a th:href="@{/login}" class="indigo-question question-darken-2"><b> Sign In</b></a>
         </div>
     </div>
-</main>
+</div>
 
-<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script th:src="@{/resources/js/materialize.js}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Materialize helper to fix label overlap on pre-filled fields
-        M.updateTextFields();
-    });
-</script>
-<script>
-    document.getElementById('roleSelect').addEventListener('change', function() {
-        const wrapper = document.getElementById('licenseWrapper');
-        wrapper.style.display = (this.value === 'PROFESSIONAL') ? 'block' : 'none';
-    });
+    function toggleRoleFields() {
+        var isStudent = document.getElementById('studentRadio').checked;
+        document.getElementById('studentSection').style.display = isStudent ? 'block' : 'none';
+        document.getElementById('verificationSection').style.display = isStudent ? 'none' : 'block';
+    }
+
+    function validateForm() {
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return false;
+        }
+        return true;
+    }
 </script>
 </body>
 </html>

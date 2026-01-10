@@ -9,8 +9,21 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
-<div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+<header>
+    <div th:switch="${userRole}">
+        <div th:case="'professional'">
+            <div th:replace="~{fragments/profheaderfragment :: navbar('assessments')}"></div>
+        </div>
 
+        <div th:case="'admin'">
+            <div th:replace="~{fragments/adminheaderfragment :: navbar('assessments')}"></div>
+        </div>
+
+        <div th:case="*">
+            <p style="color:red; text-align:center;">Warning: No valid role detected! ([[${userRole}]])</p>
+        </div>
+    </div>
+</header>
 <main class="container">
     <div class="dashboard-card" style="padding: 30px; margin-top: 30px;">
         <h4 th:text="${title}">Manage Assessments</h4>
@@ -21,7 +34,7 @@
                 <span th:text="${config.testName}">Assessment Name</span>
 
                 <!-- Button to manage questions for this test type -->
-                <a th:href="@{/professional/assessments/{type}(type=${config.testType})}"
+                <a th:href="@{/{role}/assessments/{type}(role=${userRole}, type=${config.testType})}"
                    class="secondary-content btn-small indigo waves-effect waves-light">
                     Manage Questions
                     <i class="material-icons right">arrow_forward</i>
@@ -31,7 +44,7 @@
 
         <!-- Optional: Add new assessment button -->
         <div style="margin-top: 20px;">
-            <a th:href="@{/professional/assessments/new}" class="btn waves-effect waves-light green">
+            <a th:href="@{/{role}/assessments/new(role=${userRole})}" class="btn waves-effect waves-light green">
                 Add New Assessment
                 <i class="material-icons right">add</i>
             </a>

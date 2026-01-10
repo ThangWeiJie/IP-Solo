@@ -20,7 +20,7 @@ public class Professional extends User {
     private String qualification;
 
     @Column(name = "verification_document")
-    private String verification_document;
+    private String verificationDocument;
 
     public Professional() {
         super();
@@ -58,11 +58,11 @@ public class Professional extends User {
         this.qualification = qualification;
     }
 
-    public String getVerification_document() {
-        return verification_document;
+    public String getVerificationDocument() {
+        return verificationDocument;
     }
 
     public void setVerification_document(String verification_document) {
-        this.verification_document = verification_document;
+        this.verificationDocument = verificationDocument;
     }
 }

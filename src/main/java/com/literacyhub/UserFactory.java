@@ -12,14 +12,28 @@ public class UserFactory {
         User user;
 
         if ("STUDENT".equalsIgnoreCase(role)) {
-            user = new Student();
-            user.setUserRole("STUDENT");
-            user.setStatus("ACTIVE");
+            Student student = new Student();
+            student.setUserRole("STUDENT");
+            student.setStatus("ACTIVE");
+
+            // Mapping Student Specific Fields
+            student.setStudentID(dto.getStudentId());
+            student.setMajor(dto.getMajor());
+            student.setAcademicYear(dto.getAcademicYear());
+
+            user = student;
         } else if ("PROFESSIONAL".equalsIgnoreCase(role)) {
-            user = new Professional();
-            user.setUserRole("PROFESSIONAL");
-            ((Professional) user).setProfessionalId(dto.getLicenseId());
-            user.setStatus("PENDING");
+            Professional prof = new Professional();
+            prof.setUserRole("PROFESSIONAL");
+            prof.setStatus("PENDING");
+
+            // Mapping Professional Specific Fields
+            prof.setProfessionalId(dto.getProfessionalId());
+            prof.setDepartment(dto.getDepartment());
+            prof.setQualification(dto.getQualification());
+            prof.setSpecialization(dto.getSpecialization());
+
+            user = prof;
         } else {
             throw new IllegalArgumentException("Unknown Role");
         }
