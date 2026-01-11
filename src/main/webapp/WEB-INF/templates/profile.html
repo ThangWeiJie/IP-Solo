@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,13 +28,14 @@
 <!-- Background color strip for depth -->
 <div class="profile-bg hide-on-small-only"></div>
 
+<!--/*@thymesVar id="profile" type="com.literacyhub.dto.ProfileUpdateDTO"*/-->
 <main class="container main-wrapper">
     <div class="row">
         <!-- Sidebar Column -->
         <div class="col s12 m4 l3">
             <div class="card side-card z-depth-2">
                 <div class="profile-image-container center-align">
-                    <i class="material-icons">account_circle</i>
+                    <i class="material-icons" style="font-size: 80px;">account_circle</i>
                     <h5 th:text="${user.firstName + ' ' + user.lastName}" style="margin: 10px 0 5px; font-weight: 500;">User Name</h5>
                     <p class="grey-text" th:text="${user.email}" style="margin: 0;">email@domain.com</p>
                 </div>
@@ -44,9 +45,6 @@
                         <span class="status-badge green lighten-5 green-text" style="margin-left: 5px;" th:text="${user.status}">ACTIVE</span>
                     </div>
                 </div>
-                <div class="card-action center-align">
-                    <a href="#" class="btn-flat waves-effect waves-indigo indigo-text" style="text-transform: none; font-weight: 600;">Edit Profile</a>
-                </div>
             </div>
         </div>
 
@@ -55,85 +53,165 @@
             <div class="card info-card z-depth-2">
                 <div class="card-content">
 
-                    <!-- Basic Info Section -->
-                    <div class="section-header">
-                        <i class="material-icons">info</i>
-                        <span style="font-size: 1.2rem; font-weight: 500;">Account Details</span>
+                    <!-- Flash message -->
+                    <div th:if="${success}" class="card-panel green lighten-5 green-text text-darken-4">
+                        <i class="material-icons left">check_circle</i>
+                        <span th:text="${success}">Profile updated successfully</span>
                     </div>
 
-                    <div class="row">
-                        <div class="col s12 m6 data-row">
-                            <span class="data-label">Full Name</span>
-                            <span class="data-value" th:text="${user.firstName + ' ' + user.lastName}">Full Name</span>
-                        </div>
-                        <div class="col s12 m6 data-row">
-                            <span class="data-label">Email Address</span>
-                            <span class="data-value" th:text="${user.email}">Email Address</span>
-                        </div>
-                        <div class="col s12 m6 data-row">
-                            <span class="data-label">Account Joined</span>
-                            <span class="data-value" th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'dd MMMM yyyy') : 'N/A'}">Date</span>
-                        </div>
-                    </div>
-
-                    <!-- Role-Specific Sections -->
-                    <th:block th:if="${isStudent and student != null}">
-                        <div class="section-header" style="margin-top: 20px;">
-                            <i class="material-icons">school</i>
-                            <span style="font-size: 1.2rem; font-weight: 500;">Student Information</span>
-                        </div>
-                        <div class="row">
-                            <div class="col s12 m4 data-row">
-                                <span class="data-label">Student ID</span>
-                                <span class="data-value" th:text="${student.studentID}">ID</span>
-                            </div>
-                            <div class="col s12 m4 data-row">
-                                <span class="data-label">Major / Course</span>
-                                <span class="data-value" th:text="${student.major}">Major</span>
-                            </div>
-                            <div class="col s12 m4 data-row">
-                                <span class="data-label">Academic Year</span>
-                                <span class="data-value" th:text="${student.academicYear}">Year</span>
-                            </div>
+                    <th:block th:if="${!editMode}">
+                        <div class="right-align" style="margin-bottom: 1rem;">
+                            <a th:href="@{/profile(edit=true)}"
+                               class="btn indigo waves-effect waves-light">
+                                <i class="material-icons left">edit</i>Edit Profile
+                            </a>
                         </div>
                     </th:block>
 
-                    <th:block th:if="${isProfessional and professional != null}">
-                        <div class="section-header" style="margin-top: 20px;">
-                            <i class="material-icons">workspace_premium</i>
-                            <span style="font-size: 1.2rem; font-weight: 500;">Professional Details</span>
+                    <!-- Form Wrapper -->
+                    <form th:action="@{/profile/update}" th:object="${profile}" method="post">
+
+                        <!-- Basic Info Section -->
+                        <div class="section-header">
+                            <i class="material-icons">info</i>
+                            <span style="font-size: 1.2rem; font-weight: 500;">Account Details</span>
                         </div>
+
                         <div class="row">
+                            <!-- Full Name -->
                             <div class="col s12 m6 data-row">
-                                <span class="data-label">Department</span>
-                                <span class="data-value" th:text="${professional.department}">Dept</span>
+                                <span class="data-label">Full Name</span>
+                                <th:block th:if="${!editMode}">
+                                    <span class="data-value" th:text="${user.firstName + ' ' + user.lastName}">Full Name</span>
+                                </th:block>
+                                <th:block th:if="${editMode}">
+                                    <div class="input-field">
+                                        <input type="text" id="firstName" th:field="*{firstName}">
+                                        <label for="firstName" class="active">First Name</label>
+                                    </div>
+                                    <div class="input-field">
+                                        <input type="text" id="lastName" th:field="*{lastName}">
+                                        <label for="lastName" class="active">Last Name</label>
+                                    </div>
+                                </th:block>
                             </div>
+
+                            <!-- Email (read-only) -->
                             <div class="col s12 m6 data-row">
-                                <span class="data-label">Specialization</span>
-                                <span class="data-value" th:text="${professional.specialization}">Specialty</span>
+                                <span class="data-label">Email Address</span>
+                                <span class="data-value" th:text="${user.email}">Email Address</span>
                             </div>
+
+                            <!-- Account Joined -->
                             <div class="col s12 m6 data-row">
-                                <span class="data-label">Qualification</span>
-                                <span class="data-value" th:text="${professional.qualification}">Degree</span>
+                                <span class="data-label">Account Joined</span>
+                                <span class="data-value" th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'dd MMMM yyyy') : 'N/A'}">Date</span>
                             </div>
-                            <div class="col s12 m6 data-row">
-                                <span class="data-label">Verification</span>
-                                <span class="data-value valign-wrapper">
-                                    <i class="material-icons tiny blue-text" style="margin-right: 5px;">verified</i>
-                                    <span th:text="${professional.verificationStatus}">Status</span>
+                        </div>
+
+                        <!-- Student Section -->
+                        <th:block th:if="${isStudent and student != null}">
+                            <div class="section-header" style="margin-top: 20px;">
+                                <i class="material-icons">school</i>
+                                <span style="font-size: 1.2rem; font-weight: 500;">Student Information</span>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Student ID</span>
+                                    <span class="data-value" th:text="${student.studentID}">ID</span>
+                                </div>
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Major / Course</span>
+                                    <th:block th:if="${!editMode}">
+                                        <span class="data-value" th:text="${student.major}">Major</span>
+                                    </th:block>
+                                    <th:block th:if="${editMode}">
+                                        <div class="input-field">
+                                            <input type="text" id="major" th:field="*{major}">
+                                            <label for="major" class="active">Major / Course</label>
+                                        </div>
+                                    </th:block>
+                                </div>
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Academic Year</span>
+                                    <th:block th:if="${!editMode}">
+                                        <span class="data-value" th:text="${student.academicYear}">Year</span>
+                                    </th:block>
+                                    <th:block th:if="${editMode}">
+                                        <div class="input-field">
+                                            <input type="text" id="academicYear" th:field="*{academicYear}">
+                                            <label for="academicYear" class="active">Academic Year</label>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
+
+                        <!-- Professional Section -->
+                        <th:block th:if="${isProfessional and professional != null}">
+                            <div class="section-header" style="margin-top: 20px;">
+                                <i class="material-icons">workspace_premium</i>
+                                <span style="font-size: 1.2rem; font-weight: 500;">Professional Details</span>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Department</span>
+                                    <th:block th:if="${!editMode}">
+                                        <span class="data-value" th:text="${professional.department}">Dept</span>
+                                    </th:block>
+                                    <th:block th:if="${editMode}">
+                                        <div class="input-field">
+                                            <input type="text" id="department" th:field="*{department}">
+                                            <label for="department" class="active">Department</label>
+                                        </div>
+                                    </th:block>
+                                </div>
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Specialization</span>
+                                    <th:block th:if="${!editMode}">
+                                        <span class="data-value" th:text="${professional.specialization}">Specialty</span>
+                                    </th:block>
+                                    <th:block th:if="${editMode}">
+                                        <div class="input-field">
+                                            <input type="text" id="specialization" th:field="*{specialization}">
+                                            <label for="specialization" class="active">Specialization</label>
+                                        </div>
+                                    </th:block>
+                                </div>
+                                <div class="col s12 m6 data-row">
+                                    <span class="data-label">Qualification</span>
+                                    <th:block th:if="${!editMode}">
+                                        <span class="data-value" th:text="${professional.qualification}">Degree</span>
+                                    </th:block>
+                                    <th:block th:if="${editMode}">
+                                        <div class="input-field">
+                                            <input type="text" id="qualification" th:field="*{qualification}">
+                                            <label for="qualification" class="active">Qualification</label>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
+
+                        <!-- Admin Notice -->
+                        <th:block th:if="${isAdmin}">
+                            <div class="card-panel indigo lighten-5 z-depth-0" style="border-radius: 8px; margin-top: 20px;">
+                                <span class="indigo-text text-darken-4">
+                                    <i class="material-icons left">security</i>
+                                    You are logged in with Administrative privileges.
                                 </span>
                             </div>
-                        </div>
-                    </th:block>
+                        </th:block>
 
-                    <th:block th:if="${isAdmin}">
-                        <div class="card-panel indigo lighten-5 z-depth-0" style="border-radius: 8px;">
-                            <span class="indigo-text text-darken-4">
-                                <i class="material-icons left">security</i>
-                                You are logged in with Administrative privileges.
-                            </span>
-                        </div>
-                    </th:block>
+                        <!-- Save / Cancel Buttons -->
+                        <th:block th:if="${editMode}">
+                            <div class="center-align" style="margin-top: 1rem;">
+                                <button type="submit" class="btn indigo waves-effect waves-light">Save</button>
+                                <a th:href="@{/profile}" class="btn-flat grey-text">Cancel</a>
+                            </div>
+                        </th:block>
+
+                    </form>
 
                 </div>
             </div>

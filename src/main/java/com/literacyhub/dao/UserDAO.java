@@ -63,4 +63,10 @@ public class UserDAO {
         Session session = sessionFactory.getCurrentSession();
         session.save(user);
     }
+
+    @Transactional
+    public void update(User user) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(user);
+    }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="header_head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,42 +10,42 @@
 </head>
 
 <body>
-<nav th:fragment="navbar(activePage)" class="indigo darken-2 z-depth-0" style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-    <div class="nav-wrapper container">
+<nav th:fragment="navbar(activePage)" class="indigo darken-2 z-depth-0"
+     style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+    <div class="nav-wrapper">
         <a th:href="@{/}" class="brand-logo left">
             <i class="material-icons left hide-on-small-only">psychology</i>
             <span style="font-weight: 300;">Literacy Hub</span>
         </a>
 
-        <ul class="right">
-            <li th:class="${activePage == 'home' ? 'active' : ''}">
-                <a href="/">Home</a>
-            </li>
-            <li th:class="${activePage == 'dashboard' ? 'active' : ''}">
-                <a href="/dashboard">Dashboard</a>
-            </li>
-            <li th:class="${activePage == 'resources' ? 'active' : ''}">
-                <a th:href="@{/professional/resources}">Resources</a>
-            </li>
-            <li th:class="${activePage == 'assessment' ? 'active' : ''}">
-                <a th:href="@{/professional/assessments/list}">Self Assessment</a>
-            </li>
-            <li class="hide-on-small-only">
-                <a th:href="@{/logout}" class="waves-effect waves-light btn indigo lighten-1"
-                   style="text-transform: none !important; border-radius: 4px; margin-left: 10px; height: 36px; line-height: 36px;">
-                    Sign Out
-                </a>
-            </li>
-            <li th:class="${activePage == 'profile' ? 'active' : ''}">
-                <a th:href="@{/profile}" class="valign-wrapper">
-                    <i class="material-icons">account_circle</i>
-                    <span class="hide-on-med-and-down" style="margin-left: 5px;">Profile</span>
-                </a>
-            </li>
-            <li class="hide-on-med-and-up">
-                <a href="/logout"><i class="material-icons">exit_to_app</i></a>
-            </li>
-        </ul>
+        <div class="container">
+            <ul class="right">
+                <li th:class="${activePage == 'home' ? 'active' : ''}">
+                    <a th:href="@{/}">Home</a>
+                </li>
+                <li th:class="${activePage == 'resources' ? 'active' : ''}">
+                    <a th:href="@{/professional/resources}">Resources</a>
+                </li>
+                <li th:class="${activePage == 'assessment' ? 'active' : ''}">
+                    <a th:href="@{/professional/assessments/list}">Self Assessment</a>
+                </li>
+                <li class="hide-on-small-only">
+                    <a th:href="@{/logout}" class="waves-effect waves-light btn indigo lighten-1"
+                       style="text-transform: none !important; border-radius: 4px; margin-left: 10px; height: 36px; line-height: 36px;">
+                        Sign Out
+                    </a>
+                </li>
+                <li th:class="${activePage == 'profile' ? 'active' : ''}">
+                    <a th:href="@{/profile}" class="valign-wrapper">
+                        <i class="material-icons">account_circle</i>
+                        <span class="hide-on-med-and-down" style="margin-left: 5px;">Profile</span>
+                    </a>
+                </li>
+                <li class="hide-on-med-and-up">
+                    <a href="/logout"><i class="material-icons">exit_to_app</i></a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 </body>

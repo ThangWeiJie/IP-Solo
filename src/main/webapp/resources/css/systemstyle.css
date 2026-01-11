@@ -419,3 +419,16 @@ nav ul li.active > a:focus {
 body.profile-view {
     background-color: #f0f2f5;
 }
+
+/* Profile Edit Form Spacing */
+.profile-edit-form {
+    padding: 1rem 2rem; /* adds spacing inside the card */
+}
+
+.profile-edit-form .input-field {
+    margin-bottom: 1.5rem; /* space between input rows */
+}
+
+.profile-edit-form .input-field input {
+    padding: 0.5rem; /* inner padding for the text box */
+}
