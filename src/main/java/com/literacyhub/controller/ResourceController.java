@@ -69,9 +69,10 @@ public class ResourceController {
                                         Model model) {
         if (sessionExpired(session, "PROFESSIONAL")) return "redirect:/login?error=denied";
 
+        User user = (User) session.getAttribute("user");
         List<Resource> resources = (q != null || (category != null && !category.isEmpty()))
-                ? resourceDAO.search(q, category)
-                : resourceDAO.findAll();
+                ? resourceDAO.searchByOwner(q, category, user.getEmail())
+                : resourceDAO.findByOwner(user.getEmail());
         List<String> categories = resourceDAO.findDistinctCategories();
         model.addAttribute("resources", resources);
         model.addAttribute("q", q);
@@ -124,8 +125,16 @@ public class ResourceController {
     @GetMapping("/professional/resources/{id}/edit")
     public String editResource(@PathVariable("id") Long id, HttpSession session, Model model) {
         if (sessionExpired(session, "PROFESSIONAL")) return "redirect:/login?error=denied";
+        
+        User user = (User) session.getAttribute("user");
         Resource res = resourceDAO.findById(id);
         if (res == null) return "redirect:/professional/resources?error=notfound";
+        
+        // Check ownership
+        if (!res.getUploadedBy().equals(user.getEmail())) {
+            return "redirect:/professional/resources?error=unauthorized";
+        }
+        
         model.addAttribute("resource", res);
         return "professional/edit-resource";
     }
@@ -137,8 +146,14 @@ public class ResourceController {
                              HttpSession session) throws IOException {
         if (sessionExpired(session, "PROFESSIONAL")) return "redirect:/login?error=denied";
 
+        User user = (User) session.getAttribute("user");
         Resource res = resourceDAO.findById(id);
         if (res == null) return "redirect:/professional/resources?error=notfound";
+
+        // Check ownership
+        if (!res.getUploadedBy().equals(user.getEmail())) {
+            return "redirect:/professional/resources?error=unauthorized";
+        }
 
         res.setTitle(form.getTitle());
         res.setDescription(form.getDescription());
@@ -168,6 +183,16 @@ public class ResourceController {
     @PostMapping("/professional/resources/{id}/delete")
     public String deleteResource(@PathVariable("id") Long id, HttpSession session) {
         if (sessionExpired(session, "PROFESSIONAL")) return "redirect:/login?error=denied";
+        
+        User user = (User) session.getAttribute("user");
+        Resource res = resourceDAO.findById(id);
+        if (res == null) return "redirect:/professional/resources?error=notfound";
+        
+        // Check ownership
+        if (!res.getUploadedBy().equals(user.getEmail())) {
+            return "redirect:/professional/resources?error=unauthorized";
+        }
+        
         resourceDAO.delete(id);
         return "redirect:/professional/resources?success=deleted";
     }

@@ -2,7 +2,7 @@
 Includes Layout, Typography, Assessment, and Profile Dashboard UI
 */
 
-/* --- 1-19: CORE SYSTEM STYLES --- */
+/* --- 1-19: CORE SYSTEM STYLES (Your original rules) --- */
 body {
     display: flex;
     min-height: 100vh;
@@ -131,7 +131,7 @@ nav ul li.active > a:focus {
     nav ul li a { padding: 0 20px !important; }
 }
 
-/* --- 20-24: FORM ENHANCEMENT STYLES --- */
+/* --- 20-24: FORM ENHANCEMENT STYLES (The missing beauty) --- */
 
 /* Question Typography & Spacing */
 .question-text {
