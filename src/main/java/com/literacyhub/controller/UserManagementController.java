@@ -4,13 +4,20 @@ import com.literacyhub.dao.UserDAO;
 import com.literacyhub.entity.Professional;
 import com.literacyhub.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -25,26 +32,42 @@ public class UserManagementController {
         List<Professional> pendingProfs = userDAO.findPendingProfessionals();
 
         model.addAttribute("users", allUsers);
-        model.addAttribute("pendingProfessional", pendingProfs);
+        model.addAttribute("pendingProfessionals", pendingProfs);
 
         return "admin/usermanagement";
     }
 
     @PostMapping("/approve")
-    public String approveProfessional(@RequestParam("userId") int userId) {
+    public String approveProfessional(@RequestParam("userId") Long userId) {
         userDAO.processApproval(userId, "APPROVE");
         return "redirect:/admin/users?msg=approved";
     }
 
     @PostMapping("/reject")
-    public String rejectProfessional(@RequestParam("userId") int userId) {
+    public String rejectProfessional(@RequestParam("userId") Long userId) {
         userDAO.processApproval(userId, "REJECT");
         return "redirect:/admin/users?msg=rejected";
     }
 
     @PostMapping("/delete")
-    public String deleteUser(@RequestParam("userId") int userId) {
+    public String deleteUser(@RequestParam("userId") Long userId) {
         userDAO.processApproval(userId, "REJECT");
         return "redirect:/admin/users?msg=deleted";
+    }
+
+    @GetMapping("/doc/{filename.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serveDocument(@PathVariable String filename) throws IOException {
+        Path filePath = Paths.get("uploads/verifications").resolve(filename).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists() || !resource.isReadable()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(resource);
     }
 }

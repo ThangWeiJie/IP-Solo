@@ -31,5 +31,5 @@
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
     
     <mvc:resources mapping="/resources/**" location="/resources/" />
-    <mvc:resources mapping="/uploads/**" location="/uploads/" />
+    <mvc:resources mapping="/uploads/verifications/**" location="file:uploads/verifications/" />
 </beans>

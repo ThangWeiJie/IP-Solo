@@ -33,6 +33,12 @@
                     Sign Out
                 </a>
             </li>
+            <li th:class="${activePage == 'profile' ? 'active' : ''}">
+                <a th:href="@{/profile}" class="valign-wrapper">
+                    <i class="material-icons">account_circle</i>
+                    <span class="hide-on-med-and-down" style="margin-left: 5px;">Profile</span>
+                </a>
+            </li>
             <li class="hide-on-med-and-up">
                 <a href="/logout"><i class="material-icons">exit_to_app</i></a>
             </li>

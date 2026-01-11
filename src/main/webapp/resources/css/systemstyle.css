@@ -1,8 +1,8 @@
 /* Mental Health Literacy Hub - System Styles
-   Includes Layout, Typography, and Assessment UI components
+Includes Layout, Typography, Assessment, and Profile Dashboard UI
 */
 
-/* --- 1-19: CORE SYSTEM STYLES (Your original rules) --- */
+/* --- 1-19: CORE SYSTEM STYLES --- */
 body {
     display: flex;
     min-height: 100vh;
@@ -23,6 +23,12 @@ main {
 
 nav {
     background-color: #303f9f !important;
+}
+
+nav .brand-logo {
+    left: 0;
+    transform: none;
+    padding-left: 16px;
 }
 
 .nav-wrapper {
@@ -125,7 +131,7 @@ nav ul li.active > a:focus {
     nav ul li a { padding: 0 20px !important; }
 }
 
-/* --- 20-24: FORM ENHANCEMENT STYLES (The missing beauty) --- */
+/* --- 20-24: FORM ENHANCEMENT STYLES --- */
 
 /* Question Typography & Spacing */
 .question-text {
@@ -236,8 +242,8 @@ nav ul li.active > a:focus {
     color: #1a237e;
 }
 
-main:has(.management-container) {
-    align-items: stretch; /* Overrides 'center' to let the table expand */
+.management-main {
+    align-items: stretch;
     padding: 20px 4%;
 }
 
@@ -245,14 +251,12 @@ main:has(.management-container) {
     width: 100%;
 }
 
-/* Table Enhancements */
-.card-panel {
-    padding: 15px !important;
-    border-radius: 8px !important;
-    overflow-x: auto; /* Adds horizontal scroll if the table is too wide on mobile */
+.card-panel.table-panel table {
+    width: 100%;
+    margin: 0;
 }
 
-/* Status Pill Styling */
+/* Status Pills */
 .status-pill {
     padding: 4px 12px;
     border-radius: 20px;
@@ -260,47 +264,158 @@ main:has(.management-container) {
     font-weight: 600;
     text-transform: uppercase;
     display: inline-block;
+    white-space: nowrap;
 }
 
-.status-active {
+.status-pill.status-active {
     background-color: #e8f5e9;
     color: #2e7d32;
     border: 1px solid #a5d6a7;
 }
 
-.status-pending {
+.status-pill.status-pending {
     background-color: #fff3e0;
     color: #ef6c00;
     border: 1px solid #ffe0b2;
 }
 
-/* Horizontal alignment for buttons in the table */
-.action-cell {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+/* Role Pills */
+.chip.role-student {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #bbdefb;
 }
 
-/* Materialize Tab Customization */
-.tabs .indicator {
-    background-color: #303f9f !important;
+.chip.role-professional {
+    background-color: #ede7f6;
+    color: #4527a0;
+    border: 1px solid #d1c4e9;
+}
+
+.chip.role-admin {
+    background-color: #fce4ec;
+    color: #ad1457;
+    border: 1px solid #f8bbd0;
+}
+
+/* Action Buttons (Approve / Reject) */
+.action-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-cell form {
+    margin: 0;
+}
+
+/* Materialize Tabs (Admin Pages) */
+.tabs.card-panel {
+    padding: 0;
 }
 
 .tabs .tab a {
-    color: #303f9f !important;
+    color: #303f9f;
     font-weight: 500;
+    line-height: 48px;
 }
 
-/* PDF link styling */
+.tabs .indicator {
+    background-color: #303f9f;
+}
+
+/* Document Link (PDF) */
 .doc-link {
     display: inline-flex;
     align-items: center;
+    gap: 5px;
     color: #1a237e;
     font-weight: 500;
     text-decoration: none;
 }
 
 .doc-link i {
-    margin-right: 5px;
     font-size: 1.2rem;
+}
+
+/* --- NEW PROFILE DASHBOARD COMPONENTS --- */
+.profile-bg {
+    background: #303f9f;
+    height: 180px;
+    width: 100%;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    z-index: -1;
+}
+
+.main-wrapper {
+    margin-top: 40px;
+    width: 100%;
+}
+
+.side-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.profile-image-container {
+    padding: 24px 0;
+    background: #fff;
+}
+
+.profile-image-container i {
+    font-size: 80px;
+    color: #303f9f;
+}
+
+.info-card {
+    border-radius: 12px;
+    padding: 10px 20px;
+}
+
+.section-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    color: #303f9f;
+}
+
+.section-header i {
+    margin-right: 10px;
+}
+
+.data-row {
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.data-label {
+    color: #757575;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.data-value {
+    color: #212121;
+    font-size: 1.1rem;
+    width: 100%;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Fix for background color in profile view */
+body.profile-view {
+    background-color: #f0f2f5;
 }

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | Literacy Hub</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+<body>
+
+<header>
+    <th:block th:if="${isAdmin}">
+        <div th:replace="~{fragments/adminheaderfragment :: navbar('profile')}"></div>
+    </th:block>
+    <th:block th:if="${isStudent}">
+        <div th:replace="~{fragments/studentheaderfragment :: navbar('profile')}"></div>
+    </th:block>
+    <th:block th:if="${isProfessional}">
+        <div th:replace="~{fragments/profheaderfragment :: navbar('profile')}"></div>
+    </th:block>
+    <th:block th:if="${!isAdmin and !isStudent and !isProfessional}">
+        <div th:replace="~{fragments/studentheaderfragment :: navbar('profile')}"></div>
+    </th:block>
+</header>
+
+<!-- Background color strip for depth -->
+<div class="profile-bg hide-on-small-only"></div>
+
+<main class="container main-wrapper">
+    <div class="row">
+        <!-- Sidebar Column -->
+        <div class="col s12 m4 l3">
+            <div class="card side-card z-depth-2">
+                <div class="profile-image-container center-align">
+                    <i class="material-icons">account_circle</i>
+                    <h5 th:text="${user.firstName + ' ' + user.lastName}" style="margin: 10px 0 5px; font-weight: 500;">User Name</h5>
+                    <p class="grey-text" th:text="${user.email}" style="margin: 0;">email@domain.com</p>
+                </div>
+                <div class="card-content" style="border-top: 1px solid #f0f0f0;">
+                    <div class="center-align">
+                        <span class="status-badge indigo lighten-5 indigo-text" th:text="${user.userRole}">ROLE</span>
+                        <span class="status-badge green lighten-5 green-text" style="margin-left: 5px;" th:text="${user.status}">ACTIVE</span>
+                    </div>
+                </div>
+                <div class="card-action center-align">
+                    <a href="#" class="btn-flat waves-effect waves-indigo indigo-text" style="text-transform: none; font-weight: 600;">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Info Column -->
+        <div class="col s12 m8 l9">
+            <div class="card info-card z-depth-2">
+                <div class="card-content">
+
+                    <!-- Basic Info Section -->
+                    <div class="section-header">
+                        <i class="material-icons">info</i>
+                        <span style="font-size: 1.2rem; font-weight: 500;">Account Details</span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col s12 m6 data-row">
+                            <span class="data-label">Full Name</span>
+                            <span class="data-value" th:text="${user.firstName + ' ' + user.lastName}">Full Name</span>
+                        </div>
+                        <div class="col s12 m6 data-row">
+                            <span class="data-label">Email Address</span>
+                            <span class="data-value" th:text="${user.email}">Email Address</span>
+                        </div>
+                        <div class="col s12 m6 data-row">
+                            <span class="data-label">Account Joined</span>
+                            <span class="data-value" th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'dd MMMM yyyy') : 'N/A'}">Date</span>
+                        </div>
+                    </div>
+
+                    <!-- Role-Specific Sections -->
+                    <th:block th:if="${isStudent and student != null}">
+                        <div class="section-header" style="margin-top: 20px;">
+                            <i class="material-icons">school</i>
+                            <span style="font-size: 1.2rem; font-weight: 500;">Student Information</span>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m4 data-row">
+                                <span class="data-label">Student ID</span>
+                                <span class="data-value" th:text="${student.studentID}">ID</span>
+                            </div>
+                            <div class="col s12 m4 data-row">
+                                <span class="data-label">Major / Course</span>
+                                <span class="data-value" th:text="${student.major}">Major</span>
+                            </div>
+                            <div class="col s12 m4 data-row">
+                                <span class="data-label">Academic Year</span>
+                                <span class="data-value" th:text="${student.academicYear}">Year</span>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${isProfessional and professional != null}">
+                        <div class="section-header" style="margin-top: 20px;">
+                            <i class="material-icons">workspace_premium</i>
+                            <span style="font-size: 1.2rem; font-weight: 500;">Professional Details</span>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m6 data-row">
+                                <span class="data-label">Department</span>
+                                <span class="data-value" th:text="${professional.department}">Dept</span>
+                            </div>
+                            <div class="col s12 m6 data-row">
+                                <span class="data-label">Specialization</span>
+                                <span class="data-value" th:text="${professional.specialization}">Specialty</span>
+                            </div>
+                            <div class="col s12 m6 data-row">
+                                <span class="data-label">Qualification</span>
+                                <span class="data-value" th:text="${professional.qualification}">Degree</span>
+                            </div>
+                            <div class="col s12 m6 data-row">
+                                <span class="data-label">Verification</span>
+                                <span class="data-value valign-wrapper">
+                                    <i class="material-icons tiny blue-text" style="margin-right: 5px;">verified</i>
+                                    <span th:text="${professional.verificationStatus}">Status</span>
+                                </span>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="${isAdmin}">
+                        <div class="card-panel indigo lighten-5 z-depth-0" style="border-radius: 8px;">
+                            <span class="indigo-text text-darken-4">
+                                <i class="material-icons left">security</i>
+                                You are logged in with Administrative privileges.
+                            </span>
+                        </div>
+                    </th:block>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        M.AutoInit(document.body);
+    });
+</script>
+
+</body>
+</html>

@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Table(name = "professionals")
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Professional extends User {
-    @Column(name = "license_id")
+    @Column(name = "professional_id")
     private String professionalId;
 
     @Column(name = "specialization")

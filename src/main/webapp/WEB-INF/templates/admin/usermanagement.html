@@ -11,7 +11,7 @@
 <body>
 <div th:replace="~{fragments/adminheaderfragment :: navbar('usermanagement')}"></div>
 
-<main>
+<main class="management-main">
     <div class="management-container">
         <div class="row">
             <div class="col s12">
@@ -28,7 +28,7 @@
             </div>
 
             <div id="allUsers" class="col s12">
-                <div class="card-panel">
+                <div class="card-panel table-panel">
                     <table class="highlight">
                         <thead>
                         <tr>
@@ -45,7 +45,13 @@
                             <td th:text="${u.id}">1</td>
                             <td><strong th:text="${u.firstName + ' ' + u.lastName}">Name</strong></td>
                             <td th:text="${u.email}">email@example.com</td>
-                            <td><span class="chip" th:text="${u.userRole}">ROLE</span></td>
+                            <td>
+                                <span class="chip"
+                                      th:classappend="'role-' + ${#strings.toLowerCase(u.userRole)}"
+                                      th:text="${u.userRole}">
+                                    ROLE
+                                </span>
+                            </td>
                             <td>
                                         <span th:classappend="${u.status == 'ACTIVE' ? 'status-active' : 'status-pending'}"
                                               class="status-pill" th:text="${u.status}">STATUS</span>
@@ -58,7 +64,7 @@
             </div>
 
             <div id="approvals" class="col s12">
-                <div class="card-panel">
+                <div class="card-panel table-panel">
                     <table class="highlight">
                         <thead>
                         <tr>
@@ -75,9 +81,12 @@
                             <td th:text="${prof.qualification}">PhD</td>
                             <td th:text="${prof.department}">Psychology</td>
                             <td>
-                                <a th:href="@{'/' + ${prof.verificationDocument}}" target="_blank" class="doc-link">
+                                <a th:if="${prof.verificationDocument != null}"
+                                   th:href="@{/admin/users/doc/{file}(file=${prof.verificationDocument})}"
+                                   target="_blank" class="doc-link">
                                     <i class="material-icons">picture_as_pdf</i> View
                                 </a>
+                                <span th:if="${prof.verificationDocument == null}">No Document</span>
                             </td>
                             <td class="action-cell">
                                 <form th:action="@{/admin/users/approve}" method="post" style="margin:0;">

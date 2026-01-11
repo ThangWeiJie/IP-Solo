@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Controller
 public class AuthController {
@@ -79,9 +82,15 @@ public class AuthController {
             if (newUser instanceof Professional && file != null && !file.isEmpty()) {
                 Professional professional = (Professional) newUser;
 
-                String pathOnDisk = saveVerificationDocument(file, registrationDTO.getEmail());
-                System.out.println("PATH GENERATED: " + pathOnDisk);
-                professional.setVerificationDocument(pathOnDisk);
+                if (file.isEmpty()) {
+                    model.addAttribute("error", "Verification document is required for professionals.");
+                    return "register";
+                }
+
+                String filename = saveVerificationDocument(file, registrationDTO.getEmail());
+                System.out.println("Saved verification document as: " + filename);
+
+                professional.setVerificationDocument(filename);
             }
 
             userDAO.save(newUser);
@@ -95,7 +104,6 @@ public class AuthController {
         catch(Exception e) {
             e.printStackTrace();
             model.addAttribute("error", "Registration failed. Email might already be in use.");
-//            model.addAttribute("regData", registrationDTO);
             return "register";
         }
     }
@@ -112,17 +120,21 @@ public class AuthController {
     private String saveVerificationDocument(MultipartFile file, String email) throws IOException {
         String UPLOAD_DIR = "uploads/verifications/";
 
-        java.io.File directory = new File(UPLOAD_DIR);
+        if (file == null || file.isEmpty()) {
+            throw new IOException("File is empty");
+        }
 
-        if(!directory.exists()) {
-            directory.mkdirs();
+        File dir = new File(UPLOAD_DIR);
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
 
         String filename = email.replaceAll("[^a-zA-Z0-9]", "_") + "_" + System.currentTimeMillis() + ".pdf";
-        java.nio.file.Path path = java.nio.file.Paths.get(UPLOAD_DIR + filename);
 
-        java.nio.file.Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        Path path = Paths.get(UPLOAD_DIR, filename);
 
-        return UPLOAD_DIR + filename;
+        Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+        return filename;
     }
 }
