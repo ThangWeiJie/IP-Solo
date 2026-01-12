@@ -1,19 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage - Student</title>
+    <title>Student Dashboard | LiteracyHub</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/resources/css/materialize.css}" media="screen,projection">
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+        .dashboard-container { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+        .welcome-card { background: white; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .welcome-card h4 { margin: 0 0 8px 0; color: #333; font-weight: 400; }
+        .welcome-card p { margin: 0; color: #666; font-size: 1.1rem; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .stat-card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .stat-card .icon { font-size: 48px; margin-bottom: 12px; }
+        .stat-card .icon.blue { color: #2196F3; }
+        .stat-card .icon.green { color: #4CAF50; }
+        .stat-card .icon.teal { color: #009688; }
+        .stat-card .value { font-size: 2.5rem; font-weight: 600; margin: 8px 0; color: #333; }
+        .stat-card .label { color: #666; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .actions-section { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 32px; }
+        .actions-section h5 { margin: 0 0 24px 0; color: #333; font-weight: 400; }
+        .action-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .action-btn { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .action-btn:hover { transform: translateX(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); color: white; }
+        .action-btn i { font-size: 24px; }
+        .action-btn .text { flex: 1; }
+        .action-btn .title { font-weight: 600; font-size: 1.05rem; display: block; }
+        .action-btn .subtitle { font-size: 0.85rem; opacity: 0.9; }
+        
+        .info-card { background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .info-card h5 { margin: 0 0 16px 0; color: #333; font-weight: 400; }
+        .info-card p { color: #666; line-height: 1.8; margin: 0 0 16px 0; }
+        .tip-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 16px; border-radius: 4px; margin-top: 16px; }
+        .tip-box strong { color: #2e7d32; }
+    </style>
 </head>
 <body>
-    <div th:replace="~{fragments/studentheaderfragment :: navbar('home')}"></div>
-</body>
+<div th:replace="~{fragments/studentheaderfragment :: navbar('home')}"></div>
+
+<div class="dashboard-container">
+    <div class="welcome-card">
+        <h4>Welcome, <span th:text="${user.firstName}">Student</span>! 📚</h4>
+        <p>Your mental wellness journey starts here. Explore resources and track your progress.</p>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="material-icons icon blue">folder</i>
+            <div class="value" th:text="${totalResources}">0</div>
+            <div class="label">Resources Available</div>
+        </div>
+        <div class="stat-card">
+            <i class="material-icons icon green">assignment_turned_in</i>
+            <div class="value" th:text="${completedAssessments}">0</div>
+            <div class="label">Assessments Taken</div>
+        </div>
+        <div class="stat-card">
+            <i class="material-icons icon teal">school</i>
+            <div class="value" th:text="${user.major != null ? user.major : 'N/A'}">Major</div>
+            <div class="label">Your Major</div>
+        </div>
+    </div>
+    
+    <div class="actions-section">
+        <h5><i class="material-icons" style="vertical-align: middle; margin-right: 8px;">dashboard</i>Quick Actions</h5>
+        <div class="action-grid">
+            <a th:href="@{/student/resources}" class="action-btn">
+                <i class="material-icons">library_books</i>
+                <div class="text">
+                    <span class="title">Browse Resources</span>
+                    <span class="subtitle">Explore mental health materials</span>
+                </div>
+                <i class="material-icons">arrow_forward</i>
+            </a>
+            <a th:href="@{/student/self-assessment}" class="action-btn">
+                <i class="material-icons">psychology</i>
+                <div class="text">
+                    <span class="title">Take Assessment</span>
+                    <span class="subtitle">Evaluate your mental wellness</span>
+                </div>
+                <i class="material-icons">arrow_forward</i>
+            </a>
+            <a th:href="@{/student/self-assessment/history}" class="action-btn">
+                <i class="material-icons">history</i>
+                <div class="text">
+                    <span class="title">Assessment History</span>
+                    <span class="subtitle">View your past results</span>
+                </div>
+                <i class="material-icons">arrow_forward</i>
+            </a>
+            <a th:href="@{/profile}" class="action-btn">
+                <i class="material-icons">account_circle</i>
+                <div class="text">
+                    <span class="title">My Profile</span>
+                    <span class="subtitle">Update your information</span>
+                </div>
+                <i class="material-icons">arrow_forward</i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="info-card">
+        <h5><i class="material-icons" style="vertical-align: middle; margin-right: 8px;">favorite</i>Your Wellness Matters</h5>
+        <p>LiteracyHub is here to support your mental health journey. Take advantage of these features:</p>
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px;">
+                <i class="material-icons" style="color: #667eea;">check_circle</i>
+                Access curated mental health resources
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px;">
+                <i class="material-icons" style="color: #667eea;">check_circle</i>
+                Take self-assessments to track your progress
+            </li>
+            <li style="padding: 12px 0; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px;">
+                <i class="material-icons" style="color: #667eea;">check_circle</i>
+                Watch educational videos on mental wellness
+            </li>
+            <li style="padding: 12px 0; display: flex; align-items: center; gap: 12px;">
+                <i class="material-icons" style="color: #667eea;">check_circle</i>
+                Learn coping strategies and self-care techniques
+            </li>
+        </ul>
+        <div class="tip-box">
+            <strong>💡 Tip:</strong> Regular self-assessments help you understand your mental health patterns. Take one today!
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         M.updateTextFields();
     });
 </script>
+</body>
 </html>
