@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +29,8 @@ public class AuthController {
     private RedirectFactory redirectFactory;
     @Autowired
     private UserFactory userFactory;
+    @Autowired
+    private ServletContext servletContext;
 
     @GetMapping("/login")
     public String showLoginPage(HttpSession session, Model model) {
@@ -118,20 +121,26 @@ public class AuthController {
     }
 
     private String saveVerificationDocument(MultipartFile file, String email) throws IOException {
-        String UPLOAD_DIR = "uploads/verifications/";
-
         if (file == null || file.isEmpty()) {
             throw new IOException("File is empty");
         }
 
-        File dir = new File(UPLOAD_DIR);
+        // Get the real path to the uploads directory in the web application
+        String realPath = servletContext.getRealPath("/uploads/verifications");
+        
+        if (realPath == null) {
+            // Fallback to a relative path from the working directory
+            realPath = "uploads/verifications";
+        }
+
+        File dir = new File(realPath);
         if (!dir.exists()) {
             dir.mkdirs();
         }
 
         String filename = email.replaceAll("[^a-zA-Z0-9]", "_") + "_" + System.currentTimeMillis() + ".pdf";
 
-        Path path = Paths.get(UPLOAD_DIR, filename);
+        Path path = Paths.get(realPath, filename);
 
         Files.copy(file.getInputStream(), path, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 

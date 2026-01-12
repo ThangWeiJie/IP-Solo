@@ -29,6 +29,8 @@
         
         .resource-title { font-weight: 500; color: #333; }
         .resource-description { color: #666; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .youtube-indicator { display: inline-flex; align-items: center; gap: 4px; background: #ff0000; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; margin-left: 8px; }
+        .youtube-indicator i { font-size: 14px; }
         .category-tag { display: inline-block; background: #f0f0f0; color: #667eea; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
         
         .action-buttons { display: flex; gap: 8px; justify-content: flex-end; }
@@ -105,7 +107,12 @@
             <div>Actions</div>
         </div>
         <div th:each="r : ${resources}" class="table-row">
-            <div class="resource-title" th:text="${r.title}">Title</div>
+            <div>
+                <div class="resource-title" th:text="${r.title}">Title</div>
+                <span class="youtube-indicator" th:if="${r.description != null and (r.description.contains('youtube.com/watch') or r.description.contains('youtu.be/'))}">
+                    <i class="material-icons">play_circle</i>Video
+                </span>
+            </div>
             <div><span class="category-tag" th:text="${r.category}">Category</span></div>
             <div class="resource-description" th:text="${r.description}">Description</div>
             <div class="action-buttons">

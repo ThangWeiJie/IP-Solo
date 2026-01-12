@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,6 +27,9 @@ import java.util.List;
 public class UserManagementController {
     @Autowired
     private UserDAO userDAO;
+    
+    @Autowired
+    private ServletContext servletContext;
 
     @GetMapping
     public String showUserHub(Model model) {
@@ -55,19 +60,43 @@ public class UserManagementController {
         return "redirect:/admin/users?msg=deleted";
     }
 
-    @GetMapping("/doc/{filename.+}")
+    @GetMapping("/doc/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveDocument(@PathVariable String filename) throws IOException {
-        Path filePath = Paths.get("uploads/verifications").resolve(filename).normalize();
-        Resource resource = new UrlResource(filePath.toUri());
-
-        if (!resource.exists() || !resource.isReadable()) {
+        // Get the real path to the uploads directory in the web application
+        String realPath = servletContext.getRealPath("/uploads/verifications");
+        
+        if (realPath == null) {
+            // Fallback to a relative path from the working directory
+            realPath = "uploads/verifications";
+        }
+        
+        Path filePath = Paths.get(realPath).resolve(filename).normalize();
+        File file = filePath.toFile();
+        
+        // Security check: ensure the file is within the verifications directory
+        String canonicalPath = file.getCanonicalPath();
+        String uploadsDirCanonical = new File(realPath).getCanonicalPath();
+        
+        if (!canonicalPath.startsWith(uploadsDirCanonical)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        
+        if (!file.exists() || !file.canRead()) {
             return ResponseEntity.notFound().build();
+        }
+        
+        Resource resource = new UrlResource(filePath.toUri());
+        
+        // Determine content type based on file extension
+        String contentType = Files.probeContentType(filePath);
+        if (contentType == null) {
+            contentType = "application/octet-stream";
         }
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);
     }
 }

@@ -117,4 +117,45 @@ public class ProfileController {
         redirectAttributes.addFlashAttribute("success", "Profile updated successfully");
         return "redirect:/profile";
     }
+
+    @PostMapping("/profile/change-password")
+    public String changePassword(
+            HttpSession session,
+            @RequestParam("currentPassword") String currentPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword,
+            RedirectAttributes redirectAttributes
+    ) {
+        User user = (User) session.getAttribute("user");
+        
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        // Validate current password
+        if (!user.getPassword().equals(currentPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Current password is incorrect");
+            return "redirect:/profile";
+        }
+
+        // Validate new password confirmation
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "New passwords do not match");
+            return "redirect:/profile";
+        }
+
+        // Validate password length
+        if (newPassword.length() < 6) {
+            redirectAttributes.addFlashAttribute("error", "Password must be at least 6 characters long");
+            return "redirect:/profile";
+        }
+
+        // Update password
+        user.setPassword(newPassword);
+        userDAO.update(user);
+        session.setAttribute("user", user);
+
+        redirectAttributes.addFlashAttribute("success", "Password changed successfully");
+        return "redirect:/profile";
+    }
 }

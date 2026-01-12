@@ -59,17 +59,43 @@
                         <span th:text="${success}">Profile updated successfully</span>
                     </div>
 
+                    <!-- Error message -->
+                    <div th:if="${error}" class="card-panel red lighten-5 red-text text-darken-4">
+                        <i class="material-icons left">error</i>
+                        <span th:text="${error}">Error message</span>
+                    </div>
+
                     <th:block th:if="${!editMode}">
                         <div class="right-align" style="margin-bottom: 1rem;">
                             <a th:href="@{/profile(edit=true)}"
                                class="btn indigo waves-effect waves-light">
                                 <i class="material-icons left">edit</i>Edit Profile
                             </a>
+                            <a href="#changePasswordModal" class="btn amber darken-2 waves-effect waves-light modal-trigger" style="margin-left: 10px;">
+                                <i class="material-icons left">lock</i>Change Password
+                            </a>
                         </div>
                     </th:block>
 
                     <!-- Form Wrapper -->
                     <form th:action="@{/profile/update}" th:object="${profile}" method="post">
+
+                        <!-- Security Section -->
+                        <div class="section-header">
+                            <i class="material-icons">security</i>
+                            <span style="font-size: 1.2rem; font-weight: 500;">Security</span>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 data-row">
+                                <span class="data-label">Password</span>
+                                <span class="data-value">••••••••</span>
+                                <th:block th:if="${!editMode}">
+                                    <a href="#changePasswordModal" class="btn-small amber darken-2 waves-effect waves-light modal-trigger" style="margin-left: 15px;">
+                                        <i class="material-icons left tiny">edit</i>Change
+                                    </a>
+                                </th:block>
+                            </div>
+                        </div>
 
                         <!-- Basic Info Section -->
                         <div class="section-header">
@@ -219,10 +245,66 @@
     </div>
 </main>
 
+<!-- Change Password Modal -->
+<div id="changePasswordModal" class="modal">
+    <form th:action="@{/profile/change-password}" method="post" id="changePasswordForm">
+        <div class="modal-content">
+            <h5><i class="material-icons left">lock</i>Change Password</h5>
+            <p class="grey-text">Please enter your current password and choose a new password.</p>
+            
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">lock_outline</i>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                    <label for="currentPassword">Current Password</label>
+                </div>
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">lock</i>
+                    <input type="password" id="newPassword" name="newPassword" required minlength="6">
+                    <label for="newPassword">New Password (min. 6 characters)</label>
+                </div>
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">lock</i>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
+                    <label for="confirmPassword">Confirm New Password</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="modal-close btn-flat grey-text">Cancel</button>
+            <button type="submit" class="btn amber darken-2 waves-effect waves-light">
+                <i class="material-icons left">check</i>Change Password
+            </button>
+        </div>
+    </form>
+</div>
+
 <script th:src="@{/resources/js/materialize.js}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         M.AutoInit(document.body);
+        
+        // Initialize modal
+        var modalElems = document.querySelectorAll('.modal');
+        M.Modal.init(modalElems);
+        
+        // Password validation
+        document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+            var newPassword = document.getElementById('newPassword').value;
+            var confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                e.preventDefault();
+                M.toast({html: 'New passwords do not match!', classes: 'red'});
+                return false;
+            }
+            
+            if (newPassword.length < 6) {
+                e.preventDefault();
+                M.toast({html: 'Password must be at least 6 characters long!', classes: 'red'});
+                return false;
+            }
+        });
     });
 </script>
 
