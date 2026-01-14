@@ -1,6 +1,7 @@
 package com.literacyhub;
 
 import com.literacyhub.dto.RegistrationDTO;
+import com.literacyhub.entity.Admin;
 import com.literacyhub.entity.Professional;
 import com.literacyhub.entity.Student;
 import com.literacyhub.entity.User;
@@ -34,7 +35,14 @@ public class UserFactory {
             prof.setSpecialization(dto.getSpecialization());
 
             user = prof;
-        } else {
+        } else if("ADMIN".equalsIgnoreCase(role)) {
+            Admin admin = new Admin();
+            admin.setUserRole("ADMIN");
+            admin.setStatus("ACTIVE");
+
+            user = admin;
+        }
+        else {
             throw new IllegalArgumentException("Unknown Role");
         }
 

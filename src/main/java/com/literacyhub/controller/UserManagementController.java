@@ -1,6 +1,9 @@
 package com.literacyhub.controller;
 
+import com.literacyhub.UserFactory;
 import com.literacyhub.dao.UserDAO;
+import com.literacyhub.dto.RegistrationDTO;
+import com.literacyhub.entity.Admin;
 import com.literacyhub.entity.Professional;
 import com.literacyhub.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,8 @@ public class UserManagementController {
     
     @Autowired
     private ServletContext servletContext;
+    @Autowired
+    private UserFactory userFactory;
 
     @GetMapping
     public String showUserHub(Model model) {
@@ -53,6 +58,34 @@ public class UserManagementController {
         userDAO.processApproval(userId, "REJECT");
         return "redirect:/admin/users?msg=rejected";
     }
+
+    @PostMapping("/add")
+    public String addUser(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("email") String email,
+            @RequestParam("userRole") String userRole,
+            @RequestParam(value = "staffId", required = false) String staffId
+    ) {
+        RegistrationDTO dto = new RegistrationDTO();
+        dto.setFirstName(firstName);
+        dto.setLastName(lastName);
+        dto.setEmail(email);
+        dto.setPassword("defaultpassword123");
+
+        User newUser = userFactory.createNewUser(userRole, dto);
+
+        if ("ADMIN".equalsIgnoreCase(userRole)) {
+            ((Admin)newUser).setStaffId(staffId);
+            ((Admin)newUser).setDepartment("General");
+            ((Admin)newUser).setPermissions("All");
+        }
+
+        userDAO.save(newUser);
+
+        return "redirect:/admin/users?msg=added";
+    }
+
 
     @PostMapping("/delete")
     public String deleteUser(@RequestParam("userId") Long userId) {

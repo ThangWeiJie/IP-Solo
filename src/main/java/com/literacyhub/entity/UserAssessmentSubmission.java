@@ -27,6 +27,9 @@ public class UserAssessmentSubmission {
     @OneToMany(mappedBy = "submission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssessmentResult> breakdown = new ArrayList<>();
 
+    @Transient
+    private String category;
+
     @PrePersist
     protected void onDetails() {
         this.submittedAt = LocalDateTime.now();
@@ -71,5 +74,13 @@ public class UserAssessmentSubmission {
     }
     public void setSubmittedAt(LocalDateTime submittedAt) {
         this.submittedAt = submittedAt;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

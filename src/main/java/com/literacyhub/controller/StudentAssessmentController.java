@@ -33,6 +33,36 @@ public class StudentAssessmentController {
         return "student/self-assessment-list";
     }
 
+    @GetMapping("/history")
+    public String showAssessmentHistory(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("user");
+
+        if (user == null) {
+            return "redirect:/login?error=session_expired";
+        }
+
+        List<UserAssessmentSubmission> submissions = assessmentDAO.findSubmissionsByUser(user.getId());
+        System.out.println("[DEBUG] Submissions fetched: " + submissions.size());
+
+
+        for (UserAssessmentSubmission submission : submissions) {
+            System.out.println("[DEBUG] Submission ID: " + submission.getId()
+                    + ", Test Type: " + submission.getTestType()
+                    + ", Score: " + submission.getTotalScore());
+            AssessmentConfig config = assessmentDAO.findConfigByType(submission.getTestType());
+            Map<String, Object> result = assessmentService.calculateResult(submission.getTotalScore(), config);
+            submission.setCategory((String) result.get("level"));
+
+            System.out.println("[DEBUG] Submission ID: " + submission.getId()
+                    + " => Category: " + submission.getCategory());
+        }
+
+        model.addAttribute("submissions", submissions);
+        model.addAttribute("title", "Assessment History");
+
+        return "student/assessment-history";
+    }
+
     @GetMapping("/take/{type}")
     public String takeAssessment(@PathVariable String type, Model model) {
         AssessmentConfig config = assessmentDAO.findConfigByType(type);

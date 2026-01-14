@@ -17,6 +17,16 @@
             <i class="material-icons large indigo-text text-darken-2">assignment</i>
             <h4 class="indigo-text text-darken-2" style="margin-top: 0;">Self Assessment Center</h4>
         </div>
+
+        <div class="center-align" style="margin: 20px 0;">
+            <a th:href="@{/student/assessment/history}"
+               class="btn btn-submit"
+               style="max-width: 220px; padding: 0; display: inline-flex; align-items: center; justify-content: center; margin: auto;">
+                <i class="material-icons left">history</i>
+                View Assessment History
+            </a>
+        </div>
+
         <div class="row">
             <div th:each="config: ${assessment}" class="col s12 m6">
                 <!--/*@thymesVar id="config" type="com.literacyhub.entity.AssessmentConfig"*/-->

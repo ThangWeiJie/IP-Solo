@@ -5,6 +5,7 @@ import com.literacyhub.dao.UserDAO;
 import com.literacyhub.entity.Professional;
 import com.literacyhub.entity.Student;
 import com.literacyhub.entity.User;
+import com.literacyhub.entity.WellnessTip;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -53,8 +55,25 @@ public class HomeController {
             model.addAttribute("completedAssessments", 0L);
         }
 
+        try {
+            Session hibernateSession = sessionFactory.getCurrentSession();
+            List<WellnessTip> tips = hibernateSession.createQuery("FROM WellnessTip", WellnessTip.class).getResultList();
+
+            WellnessTip dailyTip = null;
+            if (!tips.isEmpty()) {
+                // deterministic pick based on current date
+                int index = Math.abs(LocalDate.now().hashCode()) % tips.size();
+                dailyTip = tips.get(index);
+            }
+
+            model.addAttribute("dailyTip", dailyTip);
+        } catch (Exception e) {
+            model.addAttribute("dailyTip", null);
+        }
+
         return "student/studenthomepage";
     }
+
 
     @GetMapping("/professional/home")
     @Transactional

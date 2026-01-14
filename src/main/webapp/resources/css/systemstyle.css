@@ -1,8 +1,9 @@
-/* Mental Health Literacy Hub - System Styles
-Includes Layout, Typography, Assessment, and Profile Dashboard UI
-*/
+/* =====================================================
+   Mental Health Literacy Hub - System Styles
+   Includes Layout, Typography, Assessment, Dashboard UI
+   ===================================================== */
 
-/* --- 1-19: CORE SYSTEM STYLES (Your original rules) --- */
+/* --- CORE SYSTEM STYLES --- */
 body {
     display: flex;
     min-height: 100vh;
@@ -65,9 +66,6 @@ nav ul li.active > a:focus {
     background: transparent !important;
     box-shadow: none !important;
     color: #fff !important;
-    height: 64px !important;
-    line-height: 64px !important;
-    padding: 0 16px !important;
 }
 
 .login-card, .dashboard-card {
@@ -92,10 +90,6 @@ nav ul li.active > a:focus {
     text-align: center;
 }
 
-.brand-logo-container i {
-    margin-bottom: 10px;
-}
-
 .btn-login, .btn-submit {
     width: 100%;
     margin-top: 20px;
@@ -103,50 +97,19 @@ nav ul li.active > a:focus {
     font-weight: 500;
     height: 45px;
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.q-card {
-    border-left: 5px solid #009688;
-    margin-bottom: 20px;
-    padding: 20px;
-    background: #f9fdfc;
-    border-radius: 0 8px 8px 0;
-}
-
-.test-section {
-    width: 100%;
-    margin-bottom: 15px;
-}
-
-@media only screen and (max-width: 600px) {
-    main { padding: 10px; }
-    .login-card, .dashboard-card { padding: 20px; }
-    nav ul li a { padding: 0 10px !important; font-size: 0.8rem; }
-}
-
-@media only screen and (min-width: 601px) {
-    nav ul li a { padding: 0 20px !important; }
-}
-
-/* --- 20-24: FORM ENHANCEMENT STYLES (The missing beauty) --- */
-
-/* Question Typography & Spacing */
+/* --- FORM / ASSESSMENT STYLES --- */
 .question-text {
     font-size: 1.15rem;
     font-weight: 500;
     color: #1a237e;
     margin-bottom: 1rem;
-    display: block;
 }
 
-/* The Likert Scale Horizontal Layout */
 .options-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 5px;
     margin: 1.5rem 0;
     padding: 15px;
@@ -154,129 +117,50 @@ nav ul li.active > a:focus {
     border-radius: 8px;
 }
 
-/* Individual Radio Items */
 .option-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
-    text-align: center;
 }
 
-/* Fix for Materialize radio text positioning */
 [type="radio"]:not(:checked) + span,
 [type="radio"]:checked + span {
     padding-left: 25px !important;
-    height: 25px;
-    line-height: 25px;
     font-size: 0.9rem;
     color: #546e7a;
 }
 
-/* Sticky Progress Bar for long forms */
 .sticky-progress {
     position: sticky;
     top: 0;
     z-index: 999;
     background: #eceff1;
     padding: 10px 25px;
-    width: 100%;
 }
 
 .progress-label {
     font-weight: bold;
     color: #303f9f;
-    margin-bottom: 5px;
-    display: block;
 }
 
-.q-card:not(:last-child) {
-    margin-bottom: 25px;
-}
-
-.submit-container {
-    margin-top: 30px;
-}
-
-.severity-scale-container {
-    margin: 25px 0;
-}
-
-.scale-label {
-    font-weight: 600;
-    display: block;
-    margin-bottom: 10px;
-    color: #1a237e;
-}
-
-.severity-scale-container .severity-scale {
-    display: flex;
-    border-radius: 8px;
-    overflow: hidden;
-    height: 38px;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
-}
-
-.severity-scale-container .scale-segment {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.85rem;
-    color: white;
-    font-weight: 500;
-}
-
-.scale-segment.normal { background: #43a047; }
-.scale-segment.mild { background: #fbc02d; color: #263238; }
-.scale-segment.moderate { background: #fb8c00; }
-.scale-segment.severe { background: #e53935; }
-.scale-segment.extreme { background: #b71c1c; }
-
-/* Indicator */
-.scale-indicator {
-    margin-top: 6px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-align: center;
-    color: #1a237e;
-}
-
-.management-main {
-    align-items: stretch;
-    padding: 20px 4%;
-}
-
-.management-container {
-    width: 100%;
-}
-
-.card-panel.table-panel table {
-    width: 100%;
-    margin: 0;
-}
-
-/* Status Pills */
+/* --- MANAGEMENT / STATUS PILLS --- */
 .status-pill {
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    display: inline-block;
-    white-space: nowrap;
 }
 
 .status-pill.status-active {
     background-color: #e8f5e9;
     color: #2e7d32;
-    border: 1px solid #a5d6a7;
 }
 
 .status-pill.status-pending {
     background-color: #fff3e0;
     color: #ef6c00;
-    border: 1px solid #ffe0b2;
 }
 
 /* Role Pills */
@@ -298,47 +182,7 @@ nav ul li.active > a:focus {
     border: 1px solid #f8bbd0;
 }
 
-/* Action Buttons (Approve / Reject) */
-.action-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.action-cell form {
-    margin: 0;
-}
-
-/* Materialize Tabs (Admin Pages) */
-.tabs.card-panel {
-    padding: 0;
-}
-
-.tabs .tab a {
-    color: #303f9f;
-    font-weight: 500;
-    line-height: 48px;
-}
-
-.tabs .indicator {
-    background-color: #303f9f;
-}
-
-/* Document Link (PDF) */
-.doc-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: #1a237e;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.doc-link i {
-    font-size: 1.2rem;
-}
-
-/* --- NEW PROFILE DASHBOARD COMPONENTS --- */
+/* --- PROFILE DASHBOARD --- */
 .profile-bg {
     background: #303f9f;
     height: 180px;
@@ -349,34 +193,16 @@ nav ul li.active > a:focus {
     z-index: -1;
 }
 
-.main-wrapper {
-    margin-top: 40px;
-    width: 100%;
-}
-
-.side-card {
-    border-radius: 12px;
-    overflow: hidden;
-}
-
-.profile-image-container {
-    padding: 24px 0;
-    background: #fff;
-}
-
-.profile-image-container i {
-    font-size: 80px;
-    color: #303f9f;
-}
-
 .info-card {
     border-radius: 12px;
-    padding: 10px 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .section-header {
     border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
     margin-bottom: 20px;
     display: flex;
     align-items: center;
@@ -387,48 +213,268 @@ nav ul li.active > a:focus {
     margin-right: 10px;
 }
 
-.data-row {
-    margin-bottom: 20px;
-    display: flex;
-    flex-wrap: wrap;
-}
-
 .data-label {
     color: #757575;
     font-size: 0.85rem;
     text-transform: uppercase;
     font-weight: 600;
-    width: 100%;
-    margin-bottom: 4px;
 }
 
 .data-value {
-    color: #212121;
     font-size: 1.1rem;
-    width: 100%;
+    color: #212121;
 }
 
-.status-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-/* Fix for background color in profile view */
-body.profile-view {
-    background-color: #f0f2f5;
-}
-
-/* Profile Edit Form Spacing */
 .profile-edit-form {
-    padding: 1rem 2rem; /* adds spacing inside the card */
+    padding: 1rem 2rem;
 }
 
 .profile-edit-form .input-field {
-    margin-bottom: 1.5rem; /* space between input rows */
+    margin-bottom: 1.5rem;
 }
 
 .profile-edit-form .input-field input {
-    padding: 0.5rem; /* inner padding for the text box */
+    padding: 0.5rem;
+}
+
+/* --- DASHBOARD GRID ALIGNMENT --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    align-items: stretch;
+}
+
+.stat-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.stat-card .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    line-height: 1;
+}
+
+.stat-card .value {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.2;
+    color: #333;
+}
+
+.stat-card .label {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #666;
+}
+
+/* --- ACTION GRID --- */
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.action-btn {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: all 0.2s;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.action-btn .text {
+    flex: 1;
+}
+
+.action-btn .title {
+    font-weight: 600;
+    font-size: 1.05rem;
+}
+
+.action-btn .subtitle {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.action-btn:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    color: white;
+}
+
+/* --- RECENT ACTIVITY --- */
+.recent-activity {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.recent-activity h5 {
+    margin: 0 0 24px 0;
+    color: #333;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.activity-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.activity-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+}
+
+.activity-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+}
+
+.activity-icon i {
+    font-size: 20px;
+}
+
+.activity-content {
+    flex: 1 1 200px;
+}
+
+.activity-title {
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 4px 0;
+}
+
+.activity-time {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+/* --- RESPONSIVE ADJUSTMENTS --- */
+@media only screen and (max-width: 600px) {
+    main { padding: 10px; }
+    .login-card, .dashboard-card { padding: 20px; }
+    nav ul li a { padding: 0 10px !important; font-size: 0.8rem; }
+    .action-btn { padding: 12px; font-size: 0.9rem; }
+    .stats-grid { gap: 12px; }
+    .action-grid { gap: 12px; }
+}
+
+/* --- ADMIN DASHBOARD SPECIFIC TWEAKS --- */
+/* --- ADMIN DASHBOARD SPECIFIC TWEAKS --- */
+
+/* 1. Base Layout: Keeps everything centered by default (Home & Profile) */
+/* --- ADMIN DASHBOARD SPECIFIC TWEAKS --- */
+
+/* 1. Base Layout: Preserves centering for Dashboard/Home/Profile */
+.management-main {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    width: 100%;
+}
+
+.management-container {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center; /* Keeps cards centered on Home page */
+}
+
+/* Ensure dashboard cards take full width of the container on Home page */
+.management-container > .dashboard-card,
+.management-container > .stats-grid,
+.management-container > .info-card,
+.management-container > .recent-activity {
+    width: 100%;
+}
+
+/* 2. Scoped Tab Fix: Only triggers when tabs are present */
+/* Removes the card-panel padding conflict that was clipping text */
+.management-container .tabs.card-panel {
+    display: block !important;
+    padding: 0 !important;
+    margin-bottom: 0;
+    height: 48px !important;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.management-container .tabs .tab {
+    height: 48px !important;
+}
+
+.management-container .tabs .tab a {
+    height: 48px !important;
+    line-height: 48px !important; /* The core fix for vertical clipping */
+    display: block;
+    padding: 0 20px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #303f9f;
+}
+
+/* Horizontal alignment for the "New" Badge within the tab */
+.management-container .tabs .tab a .badge {
+    display: inline-block !important;
+    vertical-align: middle;
+    margin-left: 8px !important;
+    position: relative !important;
+    top: -1px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    padding: 0 6px !important;
+}
+
+.management-container .tabs .indicator {
+    background-color: #303f9f;
+    height: 3px;
+}
+
+/* 3. Table Panel UI */
+.table-panel {
+    width: 100%;
+    padding: 0 !important;
+    background: white;
+    border-radius: 8px;
+    overflow-x: auto; /* Adds scrollbar for very small screens */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.table-panel table {
+    margin: 0;
 }

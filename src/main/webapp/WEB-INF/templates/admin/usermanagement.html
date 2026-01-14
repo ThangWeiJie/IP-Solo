@@ -9,10 +9,14 @@
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
 </head>
 <body>
+
 <div th:replace="~{fragments/adminheaderfragment :: navbar('usermanagement')}"></div>
 
 <main class="management-main">
     <div class="management-container">
+
+        <form id="addUserForm" th:action="@{/admin/users/add}" method="post" style="display:none;"></form>
+
         <div class="row">
             <div class="col s12">
                 <ul class="tabs card-panel">
@@ -28,35 +32,48 @@
             </div>
 
             <div id="allUsers" class="col s12">
+                <div style="padding: 0 0 12px 0; display: flex; justify-content: flex-end;">
+                    <button id="addUserBtn" class="btn waves-effect waves-light blue darken-2">
+                        <i class="material-icons left">person_add</i> Add New User
+                    </button>
+                </div>
+
                 <div class="card-panel table-panel">
-                    <table class="highlight">
+                    <table class="highlight responsive-table">
                         <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th>Status</th>
-                            <th>Joined</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="userTableBody">
                         <tr th:each="u : ${users}">
                             <td th:text="${u.id}">1</td>
-                            <td><strong th:text="${u.firstName + ' ' + u.lastName}">Name</strong></td>
+                            <td th:text="${u.firstName}">First</td>
+                            <td th:text="${u.lastName}">Last</td>
                             <td th:text="${u.email}">email@example.com</td>
                             <td>
-                                <span class="chip"
-                                      th:classappend="'role-' + ${#strings.toLowerCase(u.userRole)}"
-                                      th:text="${u.userRole}">
-                                    ROLE
-                                </span>
+                                <span class="chip" th:classappend="'role-' + ${#strings.toLowerCase(u.userRole)}"
+                                      th:text="${u.userRole}">ROLE</span>
                             </td>
                             <td>
-                                        <span th:classappend="${u.status == 'ACTIVE' ? 'status-active' : 'status-pending'}"
-                                              class="status-pill" th:text="${u.status}">STATUS</span>
+                                <span th:classappend="${u.status == 'ACTIVE' ? 'status-active' : 'status-pending'}"
+                                      class="status-pill" th:text="${u.status}">STATUS</span>
                             </td>
-                            <td th:text="${#temporals.format(u.createdAt, 'dd/MM/yyyy')}">Date</td>
+                            <td>
+                                <form th:action="@{/admin/users/delete}" method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    <input type="hidden" name="userId" th:value="${u.id}"/>
+                                    <button type="submit" class="btn-small red lighten-2 waves-effect waves-light">
+                                        <i class="material-icons">delete</i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -65,17 +82,20 @@
 
             <div id="approvals" class="col s12">
                 <div class="card-panel table-panel">
-                    <table class="highlight">
+                    <table class="highlight responsive-table">
                         <thead>
                         <tr>
                             <th>Name</th>
                             <th>Qualification</th>
                             <th>Department</th>
                             <th>Document</th>
-                            <th>Actions</th>
+                            <th class="center-align">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
+                        <tr th:if="${#lists.isEmpty(pendingProfessionals)}">
+                            <td colspan="5" class="center-align grey-text" style="padding: 2rem;">No pending approvals found.</td>
+                        </tr>
                         <tr th:each="prof : ${pendingProfessionals}">
                             <td th:text="${prof.firstName + ' ' + prof.lastName}">Name</td>
                             <td th:text="${prof.qualification}">PhD</td>
@@ -83,30 +103,33 @@
                             <td>
                                 <a th:if="${prof.verificationDocument != null}"
                                    th:href="@{/admin/users/doc/{file}(file=${prof.verificationDocument})}"
-                                   target="_blank" class="doc-link">
-                                    <i class="material-icons">picture_as_pdf</i> View
+                                   target="_blank" class="blue-text valign-wrapper">
+                                    <i class="material-icons tiny">picture_as_pdf</i>&nbsp;View
                                 </a>
-                                <span th:if="${prof.verificationDocument == null}">No Document</span>
+                                <span th:if="${prof.verificationDocument == null}" class="grey-text">No Doc</span>
                             </td>
-                            <td class="action-cell">
-                                <form th:action="@{/admin/users/approve}" method="post" style="margin:0;">
-                                    <input type="hidden" name="userId" th:value="${prof.id}"/>
-                                    <button type="submit" class="btn-small green waves-effect waves-light">
-                                        <i class="material-icons">check</i>
-                                    </button>
-                                </form>
-                                <form th:action="@{/admin/users/reject}" method="post" style="margin:0;">
-                                    <input type="hidden" name="userId" th:value="${prof.id}"/>
-                                    <button type="submit" class="btn-small red waves-effect waves-light">
-                                        <i class="material-icons">close</i>
-                                    </button>
-                                </form>
+                            <td class="center-align">
+                                <div style="display: flex; justify-content: center; gap: 8px;">
+                                    <form th:action="@{/admin/users/approve}" method="post">
+                                        <input type="hidden" name="userId" th:value="${prof.id}"/>
+                                        <button type="submit" class="btn-small green waves-effect waves-light">
+                                            <i class="material-icons">check</i>
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/admin/users/reject}" method="post">
+                                        <input type="hidden" name="userId" th:value="${prof.id}"/>
+                                        <button type="submit" class="btn-small red waves-effect waves-light">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
         </div>
     </div>
 </main>
@@ -115,7 +138,75 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         M.AutoInit(document.body);
+
+        const addUserBtn = document.getElementById('addUserBtn');
+        const tableBody = document.getElementById('userTableBody');
+
+        addUserBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (document.querySelector('.new-user-row')) return;
+
+            const newRow = document.createElement('tr');
+            newRow.classList.add('new-user-row');
+            newRow.style.backgroundColor = "#e3f2fd";
+
+            newRow.innerHTML = `
+            <td><i class="material-icons grey-text tiny">add</i></td>
+            <td><input type="text" name="firstName" form="addUserForm" placeholder="First Name" required
+                       style="height: 2rem; margin: 0; font-size: 0.9rem; border-bottom: 1px solid #9e9e9e;"></td>
+            <td><input type="text" name="lastName" form="addUserForm" placeholder="Last Name" required
+                       style="height: 2rem; margin: 0; font-size: 0.9rem; border-bottom: 1px solid #9e9e9e;"></td>
+            <td><input type="email" name="email" form="addUserForm" placeholder="Email Address" required
+                       style="height: 2rem; margin: 0; font-size: 0.9rem; border-bottom: 1px solid #9e9e9e;"></td>
+            <td>
+                <select name="userRole" form="addUserForm" class="browser-default" required
+                        style="height: 2rem; padding: 0; border: 1px solid #e0e0e0; background: rgba(255,255,255,0.8);">
+                    <option value="" disabled selected>Role</option>
+                    <option value="STUDENT">Student</option>
+                    <option value="PROFESSIONAL">Professional</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+            </td>
+            <td class="staff-id-cell" style="display:none;">
+                <input type="text" name="staffId" form="addUserForm" placeholder="Staff ID"
+                       style="height: 2rem; margin: 0; font-size: 0.9rem; border-bottom: 1px solid #9e9e9e;">
+            </td>
+            <td class="status-cell"><span class="status-pill status-pending">NEW</span></td>
+            <td>
+                <button type="submit" form="addUserForm" class="btn-small green waves-effect waves-light">
+                    <i class="material-icons">check</i>
+                </button>
+                <button type="button" class="btn-small red waves-effect waves-light cancel-btn">
+                    <i class="material-icons">close</i>
+                </button>
+            </td>
+        `;
+
+            tableBody.prepend(newRow);
+
+            newRow.querySelector('.cancel-btn').addEventListener('click', function() {
+                newRow.remove();
+            });
+
+            // Logic to toggle Staff ID based on role
+            const roleSelect = newRow.querySelector('select[name="userRole"]');
+            const staffCell = newRow.querySelector('.staff-id-cell');
+            const statusCell = newRow.querySelector('.status-cell');
+
+            roleSelect.addEventListener('change', function() {
+                if (this.value === 'ADMIN') {
+                    staffCell.style.display = 'table-cell';
+                    staffCell.querySelector('input').required = true;
+                    statusCell.style.display = 'none'; // Hide status to make room for staff ID
+                } else {
+                    staffCell.style.display = 'none';
+                    staffCell.querySelector('input').required = false;
+                    statusCell.style.display = 'table-cell';
+                }
+            });
+        });
     });
 </script>
+
 </body>
 </html>

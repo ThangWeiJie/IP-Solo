@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Manage Wellness Tips</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<header>
+    <div th:switch="${userRole}">
+        <div th:case="'professional'">
+            <div th:replace="~{fragments/profheaderfragment :: navbar('wellness')}"></div>
+        </div>
+
+        <div th:case="'admin'">
+            <div th:replace="~{fragments/adminheaderfragment :: navbar('wellness')}"></div>
+        </div>
+
+        <div th:case="*">
+            <p style="color:red; text-align:center;">Warning: No valid role detected! ([[${userRole}]])</p>
+        </div>
+    </div>
+</header>
+
+<main class="management-main">
+    <div class="dashboard-container">
+
+        <div class="dashboard-card">
+            <h4 class="section-header">
+                <i class="material-icons">spa</i>
+                <span th:text="${title}">Wellness Tips</span>
+            </h4>
+
+            <div class="right" style="margin-bottom: 15px;">
+                <a th:href="@{/{role}/wellness/add(role=${userRole})}" class="btn indigo">
+                    <i class="material-icons left">add</i> Add Tip
+                </a>
+            </div>
+
+            <table class="highlight responsive-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tip</th>
+                    <th class="center-align">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="tip : ${tips}">
+                    <td th:text="${tip.id}">1</td>
+                    <td th:text="${tip.tip}">Sample wellness tip...</td>
+
+                    <td class="center-align">
+                        <a th:href="@{/{role}/wellness/edit/{id}(role=${userRole}, id=${tip.id})}"
+                           class="btn-small orange">
+                            <i class="material-icons">edit</i>
+                        </a>
+
+                        <a th:href="@{/{role}/wellness/delete/{id}(role=${userRole}, id=${tip.id})}"
+                           class="btn-small red" onclick="return confirm('Are you sure?');">
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(tips)}">
+                    <td colspan="4" class="center-align grey-text">No tips available</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+</body>
+</html>

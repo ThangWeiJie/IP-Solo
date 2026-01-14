@@ -3,7 +3,7 @@
 <head th:fragment="header_head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:question="${title}">MH Hub</title>
+    <title th:text="${title}">MH Hub</title>
     <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
@@ -25,6 +25,9 @@
                 </li>
                 <li th:class="${activePage == 'resources' ? 'active' : ''}">
                     <a th:href="@{/professional/resources}">Resources</a>
+                </li>
+                <li th:class="${activePage == 'wellness' ? 'active' : ''}">
+                    <a th:href="@{/admin/wellness/list}">Wellness</a>
                 </li>
                 <li th:class="${activePage == 'assessment' ? 'active' : ''}">
                     <a th:href="@{/admin/assessments/list}">Self Assessment</a>

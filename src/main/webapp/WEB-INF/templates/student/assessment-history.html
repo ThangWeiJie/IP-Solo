@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header_head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Assessment History</title>
+    <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
+</head>
+
+<body>
+<div th:replace="~{fragments/studentheaderfragment :: navbar('assessment')}"></div>
+
+<!--/*@thymesVar id="submissions" type="java.util.List<com.literacyhub.entity.UserAssessmentSubmission>"*/-->
+<main class="management-main">
+    <div class="dashboard-container">
+
+        <!-- Page Header -->
+        <div class="dashboard-card">
+            <h4 class="section-header">
+                <i class="material-icons">history</i>
+                Assessment History
+            </h4>
+            <p>Review your previous assessments and see your progress over time.</p>
+        </div>
+
+        <!-- Take New Assessment Button -->
+        <div class="dashboard-card center-align">
+            <a th:href="@{/student/assessment/list}"
+               class="btn btn-submit"
+               style="max-width: 220px; margin: auto; display: flex; align-items: center; justify-content: center;">
+                <i class="material-icons left">add_circle</i>
+                Take New Assessment
+            </a>
+        </div>
+
+        <!-- History Table -->
+        <div class="dashboard-card">
+            <h5 class="section-header">
+                <i class="material-icons">list_alt</i>
+                Your Submissions
+            </h5>
+
+            <p th:text="'Submissions fetched: ' + ${submissions.size()}">Submissions fetched: 0</p>
+
+            <table class="highlight responsive-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Assessment</th>
+                    <th>Score</th>
+                    <th>Category</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="sub : ${submissions}">
+                    <td th:text="${#temporals.format(sub.submittedAt, 'dd-MMM-yyyy')}">14 Jan 2026 11:00</td>
+                    <td th:text="${sub.testType}">PHQ-9</td>
+                    <td th:text="${sub.totalScore}">12</td>
+                    <td th:text="${sub.category}">Mild</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(submissions)}">
+                    <td colspan="4" class="center-align grey-text">No assessments taken yet.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<script type="text/javascript" th:src="@{/resources/js/materialize.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        M.updateTextFields();
+    });
+</script>
+</body>
+</html>
