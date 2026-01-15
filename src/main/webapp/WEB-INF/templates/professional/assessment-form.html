@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title}">Manage Assessments</title>
+    <title th:text="${formTitle}">Assessment Form</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/resources/css/materialize.css}">
     <link rel="stylesheet" th:href="@{/resources/css/systemstyle.css}">
@@ -24,34 +24,81 @@
         </div>
     </div>
 </header>
+
 <main class="container">
     <div class="dashboard-card" style="padding: 30px; margin-top: 30px;">
-        <h4 th:text="${title}">Manage Assessments</h4>
+        <h4 th:text="${formTitle}">Assessment Form</h4>
 
-        <!-- List of all assessments -->
-        <ul class="collection">
-            <li class="collection-item" th:each="config : ${assessments}">
-                <span th:text="${config.testName}">Assessment Name</span>
+        <form th:action="@{/{role}/assessments/save(role=${userRole})}" 
+              method="post" 
+              th:object="${assessment}">
 
-                <!-- Button to manage questions for this test type -->
-                <a th:href="@{/{role}/assessments/{type}(role=${userRole}, type=${config.testType})}"
-                   class="secondary-content btn-small indigo waves-effect waves-light">
-                    Manage Questions
-                    <i class="material-icons right">arrow_forward</i>
-                </a>
-            </li>
-        </ul>
+            <!-- Hidden ID field for edit operations -->
+            <input type="hidden" th:field="*{id}" />
 
-        <!-- Optional: Add new assessment button -->
-        <div style="margin-top: 20px;">
-            <a th:href="@{/{role}/assessments/new(role=${userRole})}" class="btn waves-effect waves-light green">
-                Add New Assessment
-                <i class="material-icons right">add</i>
-            </a>
-        </div>
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input id="testType" type="text" th:field="*{testType}" required th:disabled="${assessment.id != null}">
+                    <label for="testType">Test Type (e.g., DASS21)</label>
+                </div>
+
+                <div class="input-field col s12 m6">
+                    <input id="testName" type="text" th:field="*{testName}" required>
+                    <label for="testName">Test Name</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12 m6">
+                    <input id="multiplier" type="number" th:field="*{multiplier}" value="1">
+                    <label for="multiplier">Multiplier</label>
+                </div>
+
+                <div class="input-field col s12 m6">
+                    <input id="scoringType" type="text" th:field="*{scoringType}">
+                    <label for="scoringType">Scoring Type</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="instructions" class="materialize-textarea" th:field="*{instructions}"></textarea>
+                    <label for="instructions">Instructions</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <textarea id="scoringJSON" class="materialize-textarea" th:field="*{scoringJSON}" placeholder="[{&quot;min&quot;: 0, &quot;max&quot;: 9, &quot;label&quot;: &quot;Normal&quot;, &quot;rec&quot;: &quot;You are doing well&quot;, &quot;color&quot;: &quot;green&quot;}]"></textarea>
+                    <label for="scoringJSON">Scoring Ranges (JSON)</label>
+                    <small style="color: #999;">Format: [{"min": 0, "max": 9, "label": "Normal", "rec": "Recommendation", "color": "color-class"}]</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12">
+                    <button type="submit" class="btn waves-effect waves-light green">
+                        <i class="material-icons left" th:text="${assessment.id != null} ? 'update' : 'save'"></i>
+                        <span th:text="${assessment.id != null} ? 'Update Assessment' : 'Create Assessment'"></span>
+                    </button>
+
+                    <a th:href="@{/{role}/assessments/list(role=${userRole})}" class="btn waves-effect waves-light grey">
+                        <i class="material-icons left">cancel</i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </form>
     </div>
 </main>
 
 <script th:src="@{/resources/js/materialize.js}"></script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        M.updateTextFields();
+    });
+    /*]]>*/
+</script>
 </body>
 </html>
