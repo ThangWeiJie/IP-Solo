@@ -60,9 +60,9 @@ public class ProfAssessmentController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteAssessment(@PathVariable Long id) {
+    public String deleteAssessment(@PathVariable String role, @PathVariable Long id) {
         assessmentDAO.deleteAssessment(id); // make sure you add this DAO method
-        return "redirect:/professional/assessments/list";
+        return "redirect:/" + role + "/assessments/list";
     }
 
     /** ---------------------- QUESTION CRUD ---------------------- **/
