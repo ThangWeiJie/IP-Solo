@@ -33,12 +33,27 @@
             <li class="collection-item" th:each="config : ${assessments}">
                 <span th:text="${config.testName}">Assessment Name</span>
 
-                <!-- Button to manage questions for this test type -->
-                <a th:href="@{/{role}/assessments/{type}(role=${userRole}, type=${config.testType})}"
-                   class="secondary-content btn-small indigo waves-effect waves-light">
-                    Manage Questions
-                    <i class="material-icons right">arrow_forward</i>
-                </a>
+                <div class="secondary-content"
+                     style="display:flex; align-items:center; gap:10px;">
+
+                    <!-- Button to manage questions for this test type -->
+                    <a th:href="@{/{role}/assessments/{type}(role=${userRole}, type=${config.testType})}"
+                       class="secondary-content btn-small indigo waves-effect waves-light">
+                        Manage Questions
+                        <i class="material-icons right">arrow_forward</i>
+                    </a>
+
+                    <form th:action="@{/{role}/assessments/delete/{id}(role=${userRole}, id=${config.id})}"
+                          method="post"
+                          onsubmit="return confirm('Delete this assessment? This cannot be undone.');"
+                          style="margin: 0">
+                        <button type="submit"
+                                class="btn-flat red waves-effect waves-light"
+                                title="Delete Assessment">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </form>
+                </div>
             </li>
         </ul>
 
